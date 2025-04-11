@@ -47,6 +47,6 @@ LEFT JOIN account_info AS student_account
     ON student.student_account_id = student_account.account_id
 GROUP BY guardian.guardian_id;";
 $query4="SELECT lecture_name_ar FROM lecture;";
-
+$query5 = "SELECT username FROM account_info INNER JOIN guardian WHERE guardian_account_id = account_id;";
 
 ?>

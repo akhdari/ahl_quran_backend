@@ -157,7 +157,7 @@ function add_student(
 
         // 8. Handle education info if provided
         if ($school_name !== null || $school_type !== null) {
-            $stmt = $conn->prepare("INSERT INTO education_info 
+            $stmt = $conn->prepare("INSERT INTO formal_education_info 
                 (student_id, school_name, school_type, grade, academic_level) 
                 VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("issss", 
@@ -170,7 +170,7 @@ function add_student(
         if ($enrollment_date !== null) {
             $stmt = $conn->prepare("INSERT INTO subscription_info 
                 (student_id, enrollment_date, exit_date, exit_reason, 
-                 is_exempt, exemption_percent, exemption_reason) 
+                 is_exempt_from_payment, exemption_percent, exemption_reason) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("isssidi", 
                 $student_id, $enrollment_date, $exit_date, $exit_reason,
