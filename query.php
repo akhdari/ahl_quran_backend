@@ -48,5 +48,6 @@ LEFT JOIN account_info AS student_account
 GROUP BY guardian.guardian_id;";
 $query4="SELECT lecture_name_ar FROM lecture;";
 $query5 = "SELECT username FROM account_info INNER JOIN guardian WHERE guardian_account_id = account_id;";
+$query6 = "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM teacher;";
 
 ?>

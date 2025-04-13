@@ -34,10 +34,25 @@ function add_student(
 
     try {
         // 1. Insert basic student record (always required)
-        $stmt = $conn->prepare("INSERT INTO student (student_id) VALUES (NULL)");
-        $stmt->execute();
-        $student_id = $conn->insert_id;
-        $stmt->close();
+        if ($guardian_username == null) {
+            // No guardian, insert student with NULL guardian_id
+            $stmt = $conn->prepare("INSERT INTO student (student_id, guardian_id) VALUES (NULL, NULL)");
+            $stmt->execute();
+            $student_id = $conn->insert_id;
+            $stmt->close();
+        } else {
+            // Guardian provided - get guardian_id first
+            $stmt = $conn->prepare("SELECT account_id FROM account_info WHERE username = ?");
+            $stmt->bind_param("s", $guardian_username);
+            $stmt->execute();
+            $account_id = $stmt->get_result();
+            $stmt = $conn->prepare("SELECT guardian_id FROM guardian WHERE guardian_account_id = ?");
+            $stmt->bind_param("s", $account_id);
+            $stmt->execute();
+            $stmt->close();
+
+
+        }
 
         // 2. Insert personal info (required + optional fields including parent status)
         $personal_fields = [
@@ -132,17 +147,7 @@ function add_student(
             $guardian_id = $conn->insert_id;
             $stmt->close();
 
-            // Insert guardian account if provided
-            if ($guardian_username !== null || $guardian_password !== null) {
-                $stmt = $conn->prepare("INSERT INTO account_info 
-                    (username, passcode, profile_image) 
-                    VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", 
-                    $guardian_username, $guardian_password, $guardian_image);
-                $stmt->execute();
-                $guardian_account_id = $conn->insert_id;
-                $stmt->close();
-            }
+           
 
             // Update guardian with account info if exists
             if (isset($guardian_account_id)) {
