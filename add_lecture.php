@@ -1,7 +1,7 @@
 <?php
 include_once './connect.php';
 
-function add_lecture($conn, $schedule_info, $teachers_names, $lecture_name_ar, $lecture_name_en, $circle_type, $shown_on_website)
+function add_lecture($conn, $schedule_info, $teachers_ids, $lecture_name_ar, $lecture_name_en, $circle_type, $shown_on_website)
 {
     $conn->begin_transaction();
 
@@ -16,9 +16,8 @@ function add_lecture($conn, $schedule_info, $teachers_names, $lecture_name_ar, $
         // Insert weekly schedule
         foreach ($schedule_info as $day => $time) {
             $start_time = $time['from'];
-            $end_time = $time['to'];
-
-            $stmt = $conn->prepare("INSERT INTO weekly_schedule (day_of_week, start_time, end_time, lecture_id) VALUES (?, ?, ?, ?)");
+            $end_time = $time['to']; 
+            $stmt = $conn->prepare("INSERT INTO weekly_schedule (weekly_schedule_id,day_of_week, start_time, end_time, lecture_id) VALUES (NULL,?, ?, ?, ?)");
             $stmt->bind_param("sssi", $day, $start_time, $end_time, $lecture_id);
             $stmt->execute();
             $stmt->close();
@@ -26,15 +25,15 @@ function add_lecture($conn, $schedule_info, $teachers_names, $lecture_name_ar, $
 
         // Get teacher IDs from names
         $teacher_ids = [];
-        foreach ($teachers_names as $teacher_name) {
-            $stmt = $conn->prepare("SELECT teacher_id FROM teacher WHERE teacher_name = ?");
-            $stmt->bind_param("s", $teacher_name);
+        foreach ($teachers_ids as $teacher_id) {
+            $stmt = $conn->prepare("SELECT teacher_id FROM teacher WHERE teacher_id = ?");
+            $stmt->bind_param("s", $teacher_id);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
                 $teacher_ids[] = $row['teacher_id'];
             } else {
-                throw new Exception("Teacher name '$teacher_name' not found.");
+                throw new Exception("Teacher name '$teacher_id' not found.");
             }
             $stmt->close();
         }

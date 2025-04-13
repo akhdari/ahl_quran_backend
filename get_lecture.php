@@ -28,7 +28,7 @@ try {
         'lecture_name_en'   => $info['lecture_name_en'] ?? null,
         'circle_type'       => $info['circle_type'] ?? null,
         'category'          => $info['category'] ?? null,
-        'teacher_names'     => $info['teacher_names'] ?? null,
+        'teacher_ids'     => $info['teacher_ids'] ?? null,
         'show_on_website'   => $info['show_on_website'] ?? null,
         'schedule'          => $schedule_info ?? null,
     ];
@@ -42,7 +42,7 @@ try {
     $response = add_lecture(
         $conn,
         $requiredFields['schedule'],
-        $requiredFields['teacher_names'], 
+        $requiredFields['teacher_ids'], 
         $requiredFields['lecture_name_ar'],
         $requiredFields['lecture_name_en'],
         $requiredFields['circle_type'],
