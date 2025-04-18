@@ -9,8 +9,7 @@ function get_guardian()
     $data = json_decode($jsonData, true);
 
     if (!$data) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'No JSON data received or format is invalid']);
+        http_response_code(response_code: 400);
         return null;
     }
     return $data;

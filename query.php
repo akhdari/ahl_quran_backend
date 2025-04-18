@@ -1,6 +1,7 @@
 <?php
 $query1 =
-"SELECT personal_info.first_name_ar, 
+"SELECT student.student_id,
+       personal_info.first_name_ar, 
        personal_info.last_name_ar, 
        personal_info.sex, 
        personal_info.date_of_birth,
@@ -15,10 +16,11 @@ LEFT JOIN lecture_student ON student.student_id = lecture_student.student_id
 LEFT JOIN lecture ON lecture_student.lecture_id = lecture.lecture_id;";
 $query2 = 
 "SELECT 
+    lecture.lecture_id,
     lecture.lecture_name_ar, 
     lecture.circle_type, 
     GROUP_CONCAT(DISTINCT lecture_teacher.teacher_id SEPARATOR ', ') AS teacher_ids,
-    COUNT(DISTINCT lecture_student.student_id) AS student_count
+    COUNT(lecture_student.student_id) AS student_count
 FROM lecture
 LEFT JOIN lecture_teacher ON lecture.lecture_id = lecture_teacher.lecture_id
 LEFT JOIN lecture_student ON lecture.lecture_id = lecture_student.lecture_id 
