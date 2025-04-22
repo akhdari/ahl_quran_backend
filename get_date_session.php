@@ -10,7 +10,7 @@ function get_date_session($conn) {
     if (!$data) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'No JSON data received or format is invalid']);
-        return null;
+        exit;
     }
 
     return $data;
