@@ -8,7 +8,7 @@ $result = execute_query($conn, $query1);
 $data = fetch_data_table_1($result);
 echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 mysqli_free_result($result); //releases the memory that was allocated for a query result.
-closet_db($conn, $db); //close db connection when ur done 
+closet_db($conn); //close db connection when ur done 
 
 
 ?>

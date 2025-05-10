@@ -3,7 +3,7 @@ include_once './connect.php';
 include_once './query.php';
 include_once './cors.php';
 
-$result = execute_query($conn, $query5);
+$result = execute_query($conn, $query7);
 //TODO echo the result objects 
 //TODO what is the diffrence between br and n
 $data = fetch_data_table_1($result);

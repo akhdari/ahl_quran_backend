@@ -39,7 +39,7 @@ function connect($server, $user, $pass, $db) : bool|mysqli
     }
 }*/
 
-function closet_db($conn, $db)
+function closet_db($conn)
 {
     mysqli_close($conn);
 }

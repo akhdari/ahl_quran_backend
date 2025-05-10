@@ -4,55 +4,70 @@ include_once './connect.php';
 function add_student(
     $conn,
     // Required fields
-    $first_name_ar, $last_name_ar, $sex, 
-    $username, $password, $phone_number, $email_address,
-    
+    $first_name_ar,
+    $last_name_ar,
+    $sex,
+    $username,
+    $password,
+    $phone_number,
+    $email_address,
+
     // Optional personal info (including parent status)
-    $first_name_en = null, $last_name_en = null, $nationality = null,
-    $date_of_birth = null, $place_of_birth = null, $address = null,
-    $mother_status = null, $father_status = null,
-    
+    $first_name_en = null,
+    $last_name_en = null,
+    $nationality = null,
+    $date_of_birth = null,
+    $place_of_birth = null,
+    $address = null,
+    $mother_status = null,
+    $father_status = null,
+
     // Medical info
-    $blood_type = null, $has_disease = null, $allergies = null, $disease_causes = null,
-    
+    $blood_type = null,
+    $has_disease = null,
+    $allergies = null,
+    $disease_causes = null,
+
     // Guardian info
-    $guardian_first_name = null, $guardian_last_name = null, 
-    $guardian_date_of_birth = null, $relationship = null,
-    
+    $guardian_id = null,
+    $guardian_first_name = null,
+    $guardian_last_name = null,
+    $guardian_date_of_birth = null,
+    $relationship = null,
+
     // Guardian account
-    $guardian_username = null, $guardian_password = null, $guardian_image = null,
-    
+    $guardian_username = null,
+    $guardian_password = null,
+    $guardian_image = null,
+
     // Subscription info
-    $enrollment_date = null, $exit_date = null, $exit_reason = null,
-    $is_exempt = null, $exemption_percent = null, $exemption_reason = null,
-    
+    $enrollment_date = null,
+    $exit_date = null,
+    $exit_reason = null,
+    $is_exempt = null,
+    $exemption_percent = null,
+    $exemption_reason = null,
+
     // Education info
-    $school_name = null, $school_type = null, $grade = null, $academic_level = null
+    $school_name = null,
+    $school_type = null,
+    $grade = null,
+    $academic_level = null,
+
+    // Sessions
+    $sessions = null
 ) {
     // Start transaction
     $conn->begin_transaction();
 
     try {
         // 1. Insert basic student record (always required)
-        if ($guardian_username == null) {
-            // No guardian, insert student with NULL guardian_id
-            $stmt = $conn->prepare("INSERT INTO student (student_id, guardian_id) VALUES (NULL, NULL)");
-            $stmt->execute();
-            $student_id = $conn->insert_id;
-            $stmt->close();
-        } else {
-            // Guardian provided - get guardian_id first
-            $stmt = $conn->prepare("SELECT account_id FROM account_info WHERE username = ?");
-            $stmt->bind_param("s", $guardian_username);
-            $stmt->execute();
-            $account_id = $stmt->get_result();
-            $stmt = $conn->prepare("SELECT guardian_id FROM guardian WHERE guardian_account_id = ?");
-            $stmt->bind_param("s", $account_id);
-            $stmt->execute();
-            $stmt->close();
+        $stmt = $conn->prepare("INSERT INTO student (student_id, guardian_id) VALUES (NULL, ?)");
+        $stmt->bind_param("i", $guardian_id);
+        $stmt->execute();
+        $student_id = $conn->insert_id;
+        $stmt->close();
 
-
-        }
 
         // 2. Insert personal info (required + optional fields including parent status)
         $personal_fields = [
@@ -61,7 +76,7 @@ function add_student(
             'last_name_ar' => $last_name_ar,
             'sex' => $sex
         ];
-        
+
         $optional_personal = [
             'first_name_en' => $first_name_en,
             'last_name_en' => $last_name_en,
@@ -75,7 +90,7 @@ function add_student(
 
         $personal_sql = "INSERT INTO personal_info (";
         $personal_sql .= implode(", ", array_keys($personal_fields));
-        
+
         $placeholders = "VALUES (?" . str_repeat(", ?", count($personal_fields) - 1);
         $types = "isss"; // student_id (i), then strings (s)
 
@@ -90,11 +105,20 @@ function add_student(
         }
 
         $personal_sql .= ") $placeholders)";
-        
+
         $stmt = $conn->prepare($personal_sql);
         $stmt->bind_param($types, ...array_values($personal_fields));
         $stmt->execute();
         $stmt->close();
+
+        if($sessions !== null) {
+           foreach ($sessions as $session_id) {
+                $stmt = $conn->prepare("INSERT INTO lecture_student (student_id, lecture_id) VALUES (?, ?)");
+                $stmt->bind_param("ii", $student_id, $session_id);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
 
         // 3. Insert medical info (only if provided)
         if ($blood_type !== null || $has_disease !== null || $allergies !== null || $disease_causes !== null) {
@@ -140,14 +164,18 @@ function add_student(
             $stmt = $conn->prepare("INSERT INTO guardian 
                 (first_name, last_name, date_of_birth, relationship) 
                 VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", 
-                $guardian_first_name, $guardian_last_name, 
-                $guardian_date_of_birth, $relationship);
+            $stmt->bind_param(
+                "ssss",
+                $guardian_first_name,
+                $guardian_last_name,
+                $guardian_date_of_birth,
+                $relationship
+            );
             $stmt->execute();
             $guardian_id = $conn->insert_id;
             $stmt->close();
 
-           
+
 
             // Update guardian with account info if exists
             if (isset($guardian_account_id)) {
@@ -165,8 +193,14 @@ function add_student(
             $stmt = $conn->prepare("INSERT INTO formal_education_info 
                 (student_id, school_name, school_type, grade, academic_level) 
                 VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("issss", 
-                $student_id, $school_name, $school_type, $grade, $academic_level);
+            $stmt->bind_param(
+                "issss",
+                $student_id,
+                $school_name,
+                $school_type,
+                $grade,
+                $academic_level
+            );
             $stmt->execute();
             $stmt->close();
         }
@@ -175,11 +209,18 @@ function add_student(
         if ($enrollment_date !== null) {
             $stmt = $conn->prepare("INSERT INTO subscription_info 
                 (student_id, enrollment_date, exit_date, exit_reason, 
-                 is_exempt_from_payment, exemption_percent, exemption_reason) 
+                 is_exempt_from_payment, exemption_percentage, exemption_reason) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("isssidi", 
-                $student_id, $enrollment_date, $exit_date, $exit_reason,
-                $is_exempt, $exemption_percent, $exemption_reason);
+            $stmt->bind_param(
+                "isssidi",
+                $student_id,
+                $enrollment_date,
+                $exit_date,
+                $exit_reason,
+                $is_exempt,
+                $exemption_percent,
+                $exemption_reason
+            );
             $stmt->execute();
             $stmt->close();
         }
@@ -187,15 +228,14 @@ function add_student(
         // Commit transaction
         $conn->commit();
         echo json_encode([
-            'success' => true, 
+            'success' => true,
             'message' => 'Student added successfully',
             'student_id' => $student_id
         ]);
-
     } catch (Exception $e) {
         $conn->rollback();
         echo json_encode([
-            'success' => false, 
+            'success' => false,
             'message' => 'Error: ' . $e->getMessage()
         ]);
     }

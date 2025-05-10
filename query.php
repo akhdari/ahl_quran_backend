@@ -18,7 +18,9 @@ $query2 =
 "SELECT 
     lecture.lecture_id,
     lecture.lecture_name_ar, 
+    lecture.lecture_name_en,
     lecture.circle_type, 
+    lecture.shown_on_website,
     GROUP_CONCAT(DISTINCT lecture_teacher.teacher_id SEPARATOR ', ') AS teacher_ids,
     COUNT(lecture_student.student_id) AS student_count
 FROM lecture
@@ -49,8 +51,8 @@ LEFT JOIN account_info AS student_account
     ON student.student_account_id = student_account.account_id
 GROUP BY guardian.guardian_id;";
 
-$query4="SELECT lecture_name_ar FROM lecture;";
-$query5 = "SELECT username FROM account_info INNER JOIN guardian WHERE guardian_account_id = account_id;";
-$query6 = "SELECT teacher_id, CONCAT(first_name, ' ', last_name) AS full_name FROM teacher;";
-$query7 = "SELECT student.student_id, CONCAT(personal_info.first_name_ar, ' ', personal_info.last_name_ar) AS full_name FROM student INNER JOIN personal_info ON student.student_id = personal_info.student_id;";
+$query4="SELECT lecture_id AS id, lecture_name_ar AS name FROM lecture;";
+$query5 = "SELECT username AS name, guardian_id AS id FROM account_info INNER JOIN guardian WHERE guardian_account_id = account_id;";
+$query6 = "SELECT teacher_id AS id, CONCAT(first_name, ' ', last_name) AS name FROM teacher;";
+$query7="SELECT lecture_id, lecture_name_ar FROM lecture;";
 ?>

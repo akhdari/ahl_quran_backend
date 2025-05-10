@@ -58,6 +58,7 @@ if ($data) {
             'diseaseCauses' => $studentData['medicalInfo']['diseaseCauses'] ?? null,
             
             // Guardian info
+            'guardianId' => $guardianData['personalInfo']['guardianId'] ?? null,
             'guardianFirstName' => $guardianData['personalInfo']['firstName'] ?? null,
             'guardianLastName' => $guardianData['personalInfo']['lastName'] ?? null,
             'guardianDob' => $guardianData['personalInfo']['dateOfBirth'] ?? null,
@@ -80,7 +81,9 @@ if ($data) {
             'schoolName' => $studentData['educationInfo']['schoolName'] ?? null,
             'schoolType' => $studentData['educationInfo']['schoolType'] ?? null,
             'grade' => $studentData['educationInfo']['grade'] ?? null,
-            'academicLevel' => $studentData['educationInfo']['academicLevel'] ?? null
+            'academicLevel' => $studentData['educationInfo']['academicLevel'] ?? null,
+            //sessions 
+            'sessions' => $studentData['sessions'],
         ];
 
         // Call add_student with all fields
@@ -112,6 +115,7 @@ if ($data) {
             $optionalFields['diseaseCauses'],
             
             // Guardian info
+            $optionalFields['guardianId'],
             $optionalFields['guardianFirstName'],
             $optionalFields['guardianLastName'],
             $optionalFields['guardianDob'],
@@ -134,7 +138,9 @@ if ($data) {
             $optionalFields['schoolName'],
             $optionalFields['schoolType'],
             $optionalFields['grade'],
-            $optionalFields['academicLevel']
+            $optionalFields['academicLevel'],
+            //sessions 
+             $optionalFields['sessions']
         );
 
     } catch (Exception $e) {
