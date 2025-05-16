@@ -1,0 +1,55 @@
+<?php
+
+abstract class Controller
+{
+    protected static $dbconnection;
+
+    public static function setDbConnection($db)
+    {
+        self::$dbconnection = $db;
+    }
+    public static function getAll() {
+        self::sendResponse(200, ['message' => 'getAll not implemented']);
+    }
+    public static function getOne($id) {    
+        self::sendResponse(200, ['message' => 'getOne not implemented']);
+    }
+    public static function save() {
+        self::sendResponse(200, ['message' => 'save not implemented']);
+    }
+    public static function edit($id) {
+        self::sendResponse(200, ['message' => 'edit not implemented']);
+    }
+    public static function update($id) {
+        self::sendResponse(200, ['message' => 'update not implemented']);
+    }
+    public static function delete($id) {
+        self::sendResponse(200, ['message' => 'delete not implemented']);
+    }
+
+    protected static function sendResponse(int $statusCode, $data): void
+    {
+        http_response_code($statusCode);
+        header('Content-Type: application/json');
+        $json = json_encode($data);
+        if ($json === false) {
+            var_dump(json_last_error_msg());
+        } else {
+            echo ($json);
+        }
+    }
+
+    protected static function getRequestBody() : mixed {
+        // Parse JSON input and ensure it is returned as an associative array
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!is_array($input)) {
+            echo json_encode(['error' => 'Invalid JSON input : '. json_last_error_msg() . ' - ' .$input]);
+            return null;
+        }
+
+        // Ensure all keys are strings
+        $input = array_map('strval', $input);
+        return $input;
+    }
+}
