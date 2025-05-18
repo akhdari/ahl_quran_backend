@@ -77,49 +77,66 @@ class Router
 
     public function run()
     {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        
-    
-        // Remove the base path and prefix
-        if (strpos($requestUri, $this->basePath) === 0) {
-            $requestUri = substr(substr($requestUri, strlen($this->basePath)), strlen($this->prefix));
-            $requestUri = '/' . ltrim($requestUri, '/');
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
+
+        // Strip basePath & prefix
+        foreach ([$this->basePath, $this->prefix] as $strip) {
+            if ($strip !== '' && str_starts_with($uri, $strip)) {
+                $uri = substr($uri, strlen($strip));
+            }
         }
-    
-        // Match the request URI and method with the defined routes
+        $uri = '/' . ltrim($uri, '/');
+
         foreach ($this->routes as $route) {
-            if ($route['method'] === $requestMethod) {
-                // Check for exact match or dynamic route
-                $pattern = preg_replace('/:\w+/', '(\w+)', $route['path']); // Replace :param with regex
-                $pattern = str_replace('/', '\/', $pattern); // Escape slashes for regex
-                $pattern = '/^' . $pattern . '$/'; // Add start and end delimiters
+            if ($route['method'] !== $method) {
+                continue;
+            }
 
-                if (preg_match($pattern, $requestUri, $matches)) {
-                    array_shift($matches); // Remove the full match from the matches array
-
-                    if (is_callable($route['callback'])) {
-                        // Pass dynamic parameters to the callback
-                        call_user_func_array($route['callback'], $matches);
-                    } elseif (is_array($route['callback']) && count($route['callback']) === 2) {
-                        // Handle static methods as ['ClassName', 'methodName']
-                        [$class, $method] = $route['callback'];
-                        if (class_exists($class) && method_exists($class, $method)) {
-                            call_user_func_array([$class, $method], $matches);
-                        } else {
-                            echo "Callback for route {$route['path']} is not callable.";
-                        }
-                    } else {
-                        echo "Callback for route {$route['path']} is not callable.";
-                    }
-                    return;
+            // Build a regex from the route path:
+            //  - explode on '/'
+            //  - for each segment, if it starts with ':' -> replace with '([^/]+)'
+            //    otherwise preg_quote() that segment (delimiter '#')
+            $parts = [];
+            foreach (explode('/', trim($route['path'], '/')) as $segment) {
+                if (str_starts_with($segment, ':')) {
+                    $parts[] = '([^/]+)';
+                } else {
+                    $parts[] = preg_quote($segment, '#');
                 }
+            }
+            $pattern = '#^/' . implode('/', $parts) . '$#';
+
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches); // drop full match
+                $cb = $route['callback'];
+
+                // $cb is the callback to handle the route.
+                // $matches contains the values of the route parameters (e.g., ids from the URL).
+                if (is_callable($cb)) {
+                    call_user_func_array($cb, $matches);
+                } elseif (
+                    is_array($cb)
+                    && count($cb) === 2
+                    && class_exists($cb[0])
+                    && method_exists($cb[0], $cb[1])
+                ) {
+                    call_user_func_array($cb, $matches);
+                } else {
+                    http_response_code(500);
+                    echo "Invalid callback for route {$route['path']}";
+                }
+                return;
             }
         }
 
-        // If no route matches, return a 404 response
+        // No match → 404 JSON
         http_response_code(404);
-        echo json_encode(['error' => 'Route not found : '. $requestUri]);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'error' => 'Route not found',
+            'uri'   => $uri,
+        ]);
     }
 }
 ?>

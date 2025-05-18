@@ -57,14 +57,14 @@
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param($types, ...array_values($data));
 		    $stmt->execute();
-		    $data['lecture_id'] = $conn->insert_id;
+		    $data['id'] = $conn->insert_id;
 		    return new self($data);
 		}
 
 		/** Find a record by primary key. */
 		public static function get(DB $db, int $id): ?self {
 		    $conn = $db->getConnection();
-		    $sql = "SELECT * FROM " . self::$tableName . " WHERE lecture_id = ?";
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param('i', $id);
@@ -75,29 +75,32 @@
 		}
 
 		/** Show all data. */
-		public static function getAll(DB $db): ?self {
+		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();
 		    $sql = "SELECT * FROM " . self::$tableName;
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
-		    $row = $result->fetch_assoc();
-		    return $row ? new self($row) : null;
+		    $objects = [];
+		    while ($row = $result->fetch_assoc()) {
+		        $objects[] = new self($row);
+		    }
+		    return $objects;
 		}
 
 		/** Update this record in the database. */
 		public function update(DB $db): bool {
 		    $conn = $db->getConnection();
 		    $fields = get_object_vars($this);
-		    $id = $fields['lecture_id'];
-		    unset($fields['lecture_id']);
+		    $id = $fields['id'];
+		    unset($fields['id']);
 		    $sets = array_map(fn($k) => "$k = ?", array_keys($fields));
 		    $types = str_repeat('s', count($fields)) . 'i';
 		    $values = array_values($fields);
 		    $values[] = $id;
 		    $sql = "UPDATE " . self::$tableName .
-		           " SET " . implode(', ', $sets) . " WHERE lecture_id = ?";
+		           " SET " . implode(', ', $sets) . " WHERE id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param($types, ...$values);
@@ -107,8 +110,8 @@
 		/** Delete this record from the database. */
 		public function delete(DB $db): bool {
 		    $conn = $db->getConnection();
-		    $id = $this->lecture_id;
-		    $sql = "DELETE FROM " . self::$tableName . " WHERE lecture_id = ?";
+		    $id = $this->id;
+		    $sql = "DELETE FROM " . self::$tableName . " WHERE id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param('i', $id);

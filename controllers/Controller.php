@@ -11,19 +11,19 @@ abstract class Controller
     public static function getAll() {
         self::sendResponse(200, ['message' => 'getAll not implemented']);
     }
-    public static function getOne($id) {    
+    public static function getOne(int ...$id) {    
         self::sendResponse(200, ['message' => 'getOne not implemented']);
     }
     public static function save() {
         self::sendResponse(200, ['message' => 'save not implemented']);
     }
-    public static function edit($id) {
+    public static function edit(int ...$id) {
         self::sendResponse(200, ['message' => 'edit not implemented']);
     }
-    public static function update($id) {
+    public static function update(int ...$id) {
         self::sendResponse(200, ['message' => 'update not implemented']);
     }
-    public static function delete($id) {
+    public static function delete(int ...$id) {
         self::sendResponse(200, ['message' => 'delete not implemented']);
     }
 

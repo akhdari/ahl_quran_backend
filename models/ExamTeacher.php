@@ -16,27 +16,6 @@
 		/** @var mixed $teacher_id */
 		public $teacher_id;
 
-		/** @var mixed $point_hifd */
-		public $point_hifd;
-
-		/** @var mixed $point_tajwid_applicative */
-		public $point_tajwid_applicative;
-
-		/** @var mixed $point_tajwid_theoric */
-		public $point_tajwid_theoric;
-
-		/** @var mixed $point_performance */
-		public $point_performance;
-
-		/** @var mixed $point_deduction_tal9ini */
-		public $point_deduction_tal9ini;
-
-		/** @var mixed $point_deduction_tanbihi */
-		public $point_deduction_tanbihi;
-
-		/** @var mixed $point_deduction_tajwidi */
-		public $point_deduction_tajwidi;
-
 		/** @var mixed $date */
 		public $date;
 
@@ -65,12 +44,12 @@
 		}
 
 		/** Find a record by primary key. */
-		public static function get(DB $db, int $id): ?self {
+		public static function get(DB $db, int $idExam , int $idTeacher): ?self {
 		    $conn = $db->getConnection();
-		    $sql = "SELECT * FROM " . self::$tableName . " WHERE exam_id = ?";
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE exam_id = ? AND teacher_id = ? ";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
+		    $stmt->bind_param('ii', $idExam, $idTeacher);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
 		    $row = $result->fetch_assoc();
@@ -78,29 +57,35 @@
 		}
 
 		/** Show all data. */
-		public static function getAll(DB $db): ?self {
+		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();
 		    $sql = "SELECT * FROM " . self::$tableName;
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
-		    $row = $result->fetch_assoc();
-		    return $row ? new self($row) : null;
+		    $objects = [];
+		    while ($row = $result->fetch_assoc()) {
+		        $objects[] = new self($row);
+		    }
+		    return $objects;
 		}
 
 		/** Update this record in the database. */
 		public function update(DB $db): bool {
 		    $conn = $db->getConnection();
 		    $fields = get_object_vars($this);
-		    $id = $fields['exam_id'];
+		    $idExam = $fields['exam_id'];
 		    unset($fields['exam_id']);
+			$idTeacher = $fields['teacher_id'];
+		    unset($fields['teacher_id']);
 		    $sets = array_map(fn($k) => "$k = ?", array_keys($fields));
 		    $types = str_repeat('s', count($fields)) . 'i';
 		    $values = array_values($fields);
-		    $values[] = $id;
+		    $values[] = $idExam;
+			$values[] = $idTeacher;
 		    $sql = "UPDATE " . self::$tableName .
-		           " SET " . implode(', ', $sets) . " WHERE exam_id = ?";
+		           " SET " . implode(', ', $sets) . " WHERE exam_id = ? AND teacher_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param($types, ...$values);
@@ -110,11 +95,10 @@
 		/** Delete this record from the database. */
 		public function delete(DB $db): bool {
 		    $conn = $db->getConnection();
-		    $id = $this->exam_id;
-		    $sql = "DELETE FROM " . self::$tableName . " WHERE exam_id = ?";
+		    $sql = "DELETE FROM " . self::$tableName . " WHERE exam_id = ? AND teacher_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
+		    $stmt->bind_param('ii', $this->exam_id, $this->teacher_id);
 		    return $stmt->execute();
 		}
 

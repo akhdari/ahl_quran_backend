@@ -3,7 +3,6 @@
 ## Base URL
 
 `/api/v1`
-
 ---
 
 ## General
@@ -19,32 +18,29 @@ For each resource below, the following RESTful endpoints are available unless ot
 **All endpoints are prefixed with `/api/v1`.**  
 **Use the specified HTTP method to call each endpoint.**
 
-| Method | Endpoint                                 | Description                    |
-|--------|------------------------------------------|--------------------------------|
-| GET    | `/api/v1/resource`                       | Get all items                  |
-| GET    | `/api/v1/resource/:id`                   | Get a single item by ID        |
-| POST   | `/api/v1/resource`                       | Create a new item              |
-| PUT    | `/api/v1/resource/:id`                   | Replace an item by ID          |
-| PATCH  | `/api/v1/resource/:id`                   | Update part of an item by ID   |
-| DELETE | `/api/v1/resource/:id`                   | Delete an item by ID           |
+| Method | Endpoint               | Description                  |
+| ------ | ---------------------- | ---------------------------- |
+| GET    | `/api/v1/resource`     | Get all items                |
+| GET    | `/api/v1/resource/:id` | Get a single item by ID      |
+| POST   | `/api/v1/resource`     | Create a new item            |
+| PATCH  | `/api/v1/resource/:id` | Update part of an item by ID |
+| DELETE | `/api/v1/resource/:id` | Delete an item by ID         |
 
 ---
 
-### AccountInfo
+### AccountInfo [[examples](#accountinfo-ex)]
 
-- **GET** `/api/v1/accountinfos`
-- **GET** `/api/v1/accountinfos/:id`
-- **POST** `/api/v1/accountinfos`
-- **PUT** `/api/v1/accountinfos/:id`
-- **PATCH** `/api/v1/accountinfos/:id`
-- **DELETE** `/api/v1/accountinfos/:id`
+- **GET** `/api/v1/accountinfos` [[example](#get-apiv1accountinfos)]
+- **GET** `/api/v1/accountinfos/:id` [[example](#get-apiv1accountinfos7)]
+- **POST** `/api/v1/accountinfos` [[example](#post-apiv1accountinfos)]
+- **PATCH** `/api/v1/accountinfos/:id` [[example](#patch-apiv1accountinfosid)]
+- **DELETE** `/api/v1/accountinfos/:id` [[example](#delete-apiv1accountinfosid)]
 
 ### Appreciation
 
 - **GET** `/api/v1/appreciations`
 - **GET** `/api/v1/appreciations/:id`
 - **POST** `/api/v1/appreciations`
-- **PUT** `/api/v1/appreciations/:id`
 - **PATCH** `/api/v1/appreciations/:id`
 - **DELETE** `/api/v1/appreciations/:id`
 
@@ -53,7 +49,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/contactinfos`
 - **GET** `/api/v1/contactinfos/:id`
 - **POST** `/api/v1/contactinfos`
-- **PUT** `/api/v1/contactinfos/:id`
 - **PATCH** `/api/v1/contactinfos/:id`
 - **DELETE** `/api/v1/contactinfos/:id`
 
@@ -62,7 +57,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/exams`
 - **GET** `/api/v1/exams/:id`
 - **POST** `/api/v1/exams`
-- **PUT** `/api/v1/exams/:id`
 - **PATCH** `/api/v1/exams/:id`
 - **DELETE** `/api/v1/exams/:id`
 
@@ -71,34 +65,30 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/examlevels`
 - **GET** `/api/v1/examlevels/:id`
 - **POST** `/api/v1/examlevels`
-- **PUT** `/api/v1/examlevels/:id`
 - **PATCH** `/api/v1/examlevels/:id`
 - **DELETE** `/api/v1/examlevels/:id`
 
 ### ExamStudent
 
 - **GET** `/api/v1/examstudents`
-- **GET** `/api/v1/examstudents/:id`
+- **GET** `/api/v1/examstudents/exams/:id/students/:id`
 - **POST** `/api/v1/examstudents`
-- **PUT** `/api/v1/examstudents/:id`
-- **PATCH** `/api/v1/examstudents/:id`
-- **DELETE** `/api/v1/examstudents/:id`
+- **PATCH** `/api/v1/examstudents/exams/:idExam/students/:idStudent`
+- **DELETE** `/api/v1/examstudents/exams/:idExam/students/:idStudent`
 
 ### ExamTeacher
 
 - **GET** `/api/v1/examteachers`
-- **GET** `/api/v1/examteachers/:id`
+- **GET** `/api/v1/examteachers/exams/:idExam/teachers/:id`
 - **POST** `/api/v1/examteachers`
-- **PUT** `/api/v1/examteachers/:id`
-- **PATCH** `/api/v1/examteachers/:id`
-- **DELETE** `/api/v1/examteachers/:id`
+- **PATCH** `/api/v1/examteachers/exams/:id/teachers/:id`
+- **DELETE** `/api/v1/examteachers/exams/:id/teachers/:id`
 
 ### FormalEducationInfo
 
 - **GET** `/api/v1/formaleducationinfos`
 - **GET** `/api/v1/formaleducationinfos/:id`
 - **POST** `/api/v1/formaleducationinfos`
-- **PUT** `/api/v1/formaleducationinfos/:id`
 - **PATCH** `/api/v1/formaleducationinfos/:id`
 - **DELETE** `/api/v1/formaleducationinfos/:id`
 
@@ -107,7 +97,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/goldenrecords`
 - **GET** `/api/v1/goldenrecords/:id`
 - **POST** `/api/v1/goldenrecords`
-- **PUT** `/api/v1/goldenrecords/:id`
 - **PATCH** `/api/v1/goldenrecords/:id`
 - **DELETE** `/api/v1/goldenrecords/:id`
 
@@ -116,7 +105,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/guardians`
 - **GET** `/api/v1/guardians/:id`
 - **POST** `/api/v1/guardians`
-- **PUT** `/api/v1/guardians/:id`
 - **PATCH** `/api/v1/guardians/:id`
 - **DELETE** `/api/v1/guardians/:id`
 
@@ -125,7 +113,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/lecturecontents`
 - **GET** `/api/v1/lecturecontents/:id`
 - **POST** `/api/v1/lecturecontents`
-- **PUT** `/api/v1/lecturecontents/:id`
 - **PATCH** `/api/v1/lecturecontents/:id`
 - **DELETE** `/api/v1/lecturecontents/:id`
 
@@ -134,34 +121,30 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/lectures`
 - **GET** `/api/v1/lectures/:id`
 - **POST** `/api/v1/lectures`
-- **PUT** `/api/v1/lectures/:id`
 - **PATCH** `/api/v1/lectures/:id`
 - **DELETE** `/api/v1/lectures/:id`
 
 ### LectureStudent
 
 - **GET** `/api/v1/lecturestudents`
-- **GET** `/api/v1/lecturestudents/:id`
+- **GET** `/api/v1/lecturestudents/lectures/:id/students/:id`
 - **POST** `/api/v1/lecturestudents`
-- **PUT** `/api/v1/lecturestudents/:id`
-- **PATCH** `/api/v1/lecturestudents/:id`
-- **DELETE** `/api/v1/lecturestudents/:id`
+- **PATCH** `/api/v1/lecturestudents/lectures/:id/students/:id`
+- **DELETE** `/api/v1/lecturestudents/lectures/:id/students/:id`
 
 ### LectureTeacher
 
 - **GET** `/api/v1/lectureteachers`
-- **GET** `/api/v1/lectureteachers/:id`
+- **GET** `/api/v1/lectureteachers/lectures/:id/teachers/:id`
 - **POST** `/api/v1/lectureteachers`
-- **PUT** `/api/v1/lectureteachers/:id`
-- **PATCH** `/api/v1/lectureteachers/:id`
-- **DELETE** `/api/v1/lectureteachers/:id`
+- **PATCH** `/api/v1/lectureteachers/lectures/:id/teachers/:id`
+- **DELETE** `/api/v1/lectureteachers/lectures/:id/teachers/:id`
 
 ### MedicalInfo
 
 - **GET** `/api/v1/medicalinfos`
 - **GET** `/api/v1/medicalinfos/:id`
 - **POST** `/api/v1/medicalinfos`
-- **PUT** `/api/v1/medicalinfos/:id`
 - **PATCH** `/api/v1/medicalinfos/:id`
 - **DELETE** `/api/v1/medicalinfos/:id`
 
@@ -170,7 +153,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/personalinfos`
 - **GET** `/api/v1/personalinfos/:id`
 - **POST** `/api/v1/personalinfos`
-- **PUT** `/api/v1/personalinfos/:id`
 - **PATCH** `/api/v1/personalinfos/:id`
 - **DELETE** `/api/v1/personalinfos/:id`
 
@@ -179,7 +161,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/requestcopys`
 - **GET** `/api/v1/requestcopys/:id`
 - **POST** `/api/v1/requestcopys`
-- **PUT** `/api/v1/requestcopys/:id`
 - **PATCH** `/api/v1/requestcopys/:id`
 - **DELETE** `/api/v1/requestcopys/:id`
 
@@ -188,7 +169,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/students`
 - **GET** `/api/v1/students/:id`
 - **POST** `/api/v1/students`
-- **PUT** `/api/v1/students/:id`
 - **PATCH** `/api/v1/students/:id`
 - **DELETE** `/api/v1/students/:id`
 
@@ -197,7 +177,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/subscriptioninfos`
 - **GET** `/api/v1/subscriptioninfos/:id`
 - **POST** `/api/v1/subscriptioninfos`
-- **PUT** `/api/v1/subscriptioninfos/:id`
 - **PATCH** `/api/v1/subscriptioninfos/:id`
 - **DELETE** `/api/v1/subscriptioninfos/:id`
 
@@ -206,7 +185,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/supervisors`
 - **GET** `/api/v1/supervisors/:id`
 - **POST** `/api/v1/supervisors`
-- **PUT** `/api/v1/supervisors/:id`
 - **PATCH** `/api/v1/supervisors/:id`
 - **DELETE** `/api/v1/supervisors/:id`
 
@@ -215,7 +193,6 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/teachers`
 - **GET** `/api/v1/teachers/:id`
 - **POST** `/api/v1/teachers`
-- **PUT** `/api/v1/teachers/:id`
 - **PATCH** `/api/v1/teachers/:id`
 - **DELETE** `/api/v1/teachers/:id`
 
@@ -224,25 +201,22 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **GET** `/api/v1/teamaccomplishments`
 - **GET** `/api/v1/teamaccomplishments/:id`
 - **POST** `/api/v1/teamaccomplishments`
-- **PUT** `/api/v1/teamaccomplishments/:id`
 - **PATCH** `/api/v1/teamaccomplishments/:id`
 - **DELETE** `/api/v1/teamaccomplishments/:id`
 
 ### TeamAccomplishmentStudent
 
 - **GET** `/api/v1/teamaccomplishmentstudents`
-- **GET** `/api/v1/teamaccomplishmentstudents/:id`
+- **GET** `/api/v1/teamaccomplishmentstudents/teamaccomplishments/:id/students/:id`
 - **POST** `/api/v1/teamaccomplishmentstudents`
-- **PUT** `/api/v1/teamaccomplishmentstudents/:id`
-- **PATCH** `/api/v1/teamaccomplishmentstudents/:id`
-- **DELETE** `/api/v1/teamaccomplishmentstudents/:id`
+- **PATCH** `/api/v1/teamaccomplishmentstudents/teamaccomplishments/:id/students/:id`
+- **DELETE** `/api/v1/teamaccomplishmentstudents/teamaccomplishments/:id/students/:id`
 
 ### WeeklySchedule
 
 - **GET** `/api/v1/weeklyschedules`
 - **GET** `/api/v1/weeklyschedules/:id`
 - **POST** `/api/v1/weeklyschedules`
-- **PUT** `/api/v1/weeklyschedules/:id`
 - **PATCH** `/api/v1/weeklyschedules/:id`
 - **DELETE** `/api/v1/weeklyschedules/:id`
 
@@ -253,3 +227,201 @@ For each resource below, the following RESTful endpoints are available unless ot
 - All endpoints return JSON.
 - Use appropriate HTTP methods for each action.
 - For details on request/response bodies, refer to the controller/model for each resource.
+
+## Examples
+
+### AccountInfo ex
+
+#### **GET** `/api/v1/accountinfos`
+
+```json
+{
+  "example": "get all accounts",
+  "request": {},
+  "response": [
+    {
+      "account_id": 1,
+      "username": "user",
+      "passcode": "123",
+      "account_type": "teacher"
+    },
+    {
+      "account_id": 7,
+      "username": "user2",
+      "passcode": "123",
+      "account_type": "teacher"
+    }
+  ]
+}
+```
+
+#### **GET** `/api/v1/accountinfos/7`
+
+```json
+{
+  "example": "get specific account",
+  "request": {},
+  "response": {
+    "account_id": 7,
+    "username": "user2",
+    "passcode": "123",
+    "account_type": "teacher"
+  }
+}
+```
+
+_Error response:_
+
+```json
+{
+  "example": "get specific account (not found)",
+  "request": {},
+  "response": {
+    "error": "Not found"
+  }
+}
+```
+
+#### **POST** `/api/v1/accountinfos`
+
+```json
+{
+  "example": "Add account",
+  "request": {
+    "username": "user2",
+    "passcode": "123",
+    "account_type": "teacher"
+  },
+  "response": {
+    "account_id": 7,
+    "username": "user2",
+    "passcode": "123",
+    "account_type": "teacher"
+  }
+}
+```
+
+#### **PATCH** `/api/v1/accountinfos/:id`
+
+_Request:_
+
+```json
+{
+  "passcode": "789"
+}
+```
+
+_Response:_
+
+```json
+{
+  "account_id": 7,
+  "username": "user2",
+  "passcode": "789",
+  "account_type": "teacher"
+}
+```
+
+#### **DELETE** `/api/v1/accountinfos/:id`
+
+_Response:_
+
+```json
+{
+  "message": "Account deleted successfully"
+}
+```
+
+---
+
+### WeeklySchedule ex
+
+#### **GET** `/api/v1/weeklyschedules`
+
+```json
+[
+  {
+    "id": 1,
+    "student_id": 12,
+    "day": "Monday",
+    "start_time": "08:00",
+    "end_time": "10:00"
+  },
+  {
+    "id": 2,
+    "student_id": 13,
+    "day": "Tuesday",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+]
+```
+
+#### **GET** `/api/v1/weeklyschedules/1`
+
+```json
+{
+  "id": 1,
+  "student_id": 12,
+  "day": "Monday",
+  "start_time": "08:00",
+  "end_time": "10:00"
+}
+```
+
+#### **POST** `/api/v1/weeklyschedules`
+
+_Request:_
+
+```json
+{
+  "student_id": 12,
+  "day": "Wednesday",
+  "start_time": "10:00",
+  "end_time": "12:00"
+}
+```
+
+_Response:_
+
+```json
+{
+  "id": 3,
+  "student_id": 12,
+  "day": "Wednesday",
+  "start_time": "10:00",
+  "end_time": "12:00"
+}
+```
+
+#### **PATCH** `/api/v1/weeklyschedules/3`
+
+_Request:_
+
+```json
+{
+  "end_time": "13:00"
+}
+```
+
+_Response:_
+
+```json
+{
+  "id": 3,
+  "student_id": 12,
+  "day": "Wednesday",
+  "start_time": "10:00",
+  "end_time": "13:00"
+}
+```
+
+#### **DELETE** `/api/v1/weeklyschedules/3`
+
+_Response:_
+
+```json
+{
+  "message": "Deleted"
+}
+```

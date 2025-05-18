@@ -68,56 +68,61 @@
 		}
 
 		/** Find a record by primary key. */
-		public static function get(DB $db, int $id): ?self {
-		    $conn = $db->getConnection();
-		    $sql = "SELECT * FROM " . self::$tableName . " WHERE exam_id = ?";
-		    $stmt = $conn->prepare($sql);
-		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
-		    $stmt->execute();
-		    $result = $stmt->get_result();
-		    $row = $result->fetch_assoc();
-		    return $row ? new self($row) : null;
+		public static function get(DB $db, int $idExam, int $idStudent): ?self {
+			$conn = $db->getConnection();
+			$sql = "SELECT * FROM " . self::$tableName . " WHERE exam_id = ? AND student_id = ?";
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->bind_param('ii', $idExam, $idStudent);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$row = $result->fetch_assoc();
+			return $row ? new self($row) : null;
 		}
 
 		/** Show all data. */
-		public static function getAll(DB $db): ?self {
+		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();
 		    $sql = "SELECT * FROM " . self::$tableName;
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
-		    $row = $result->fetch_assoc();
-		    return $row ? new self($row) : null;
+		    $objects = [];
+		    while ($row = $result->fetch_assoc()) {
+		        $objects[] = new self($row);
+		    }
+		    return $objects;
 		}
 
 		/** Update this record in the database. */
 		public function update(DB $db): bool {
-		    $conn = $db->getConnection();
-		    $fields = get_object_vars($this);
-		    $id = $fields['exam_id'];
-		    unset($fields['exam_id']);
-		    $sets = array_map(fn($k) => "$k = ?", array_keys($fields));
-		    $types = str_repeat('s', count($fields)) . 'i';
-		    $values = array_values($fields);
-		    $values[] = $id;
-		    $sql = "UPDATE " . self::$tableName .
-		           " SET " . implode(', ', $sets) . " WHERE exam_id = ?";
-		    $stmt = $conn->prepare($sql);
-		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param($types, ...$values);
-		    return $stmt->execute();
+			$conn = $db->getConnection();
+			$fields = get_object_vars($this);
+			$idExam = $fields['exam_id'];
+			$idStudent = $fields['student_id'];
+			unset($fields['exam_id']);
+			unset($fields['student_id']);
+			$sets = array_map(fn($k) => "$k = ?", array_keys($fields));
+			$types = str_repeat('s', count($fields)) . 'ii';
+			$values = array_values($fields);
+			$values[] = $idExam;
+			$values[] = $idStudent;
+			$sql = "UPDATE " . self::$tableName .
+				   " SET " . implode(', ', $sets) . " WHERE exam_id = ? AND student_id = ?";
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->bind_param($types, ...$values);
+			return $stmt->execute();
 		}
 
 		/** Delete this record from the database. */
 		public function delete(DB $db): bool {
 		    $conn = $db->getConnection();
-		    $id = $this->exam_id;
-		    $sql = "DELETE FROM " . self::$tableName . " WHERE exam_id = ?";
+		    $sql = "DELETE FROM " . self::$tableName . " WHERE exam_id = ? AND student_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
+		    $stmt->bind_param('ii', $this->exam_id, $this->student_id);
 		    return $stmt->execute();
 		}
 

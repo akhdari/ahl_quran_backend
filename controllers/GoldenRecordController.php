@@ -19,9 +19,9 @@ class GoldenRecordController extends Controller
         }
     }
 
-    public static function getOne($id) {
+    public static function getOne(int ...$id) {
         try {
-            $obj = GoldenRecord::get(self::$dbconnection, (int)$id);
+            $obj = GoldenRecord::get(self::$dbconnection, (int)$id[0]);
             if (!$obj) {
                 self::sendResponse(404, ['error' => 'Not found']);
             } else {
@@ -43,16 +43,12 @@ class GoldenRecordController extends Controller
         }
     }
 
-    public static function edit($id) {
-        self::getOne($id); // this already includes try-catch
-    }
-
-    public static function update($id) {
+    public static function update(int ...$id) {
         $data = self::getRequestBody();
         if (!$data) return;
 
         try {
-            $existing = GoldenRecord::get(self::$dbconnection, (int)$id);
+            $existing = GoldenRecord::get(self::$dbconnection, (int)$id[0]);
             if (!$existing) {
                 self::sendResponse(404, ['error' => 'Not found']);
                 return;
@@ -72,9 +68,9 @@ class GoldenRecordController extends Controller
         }
     }
 
-    public static function delete($id) {
+    public static function delete(int ...$id) {
         try {
-            $existing = GoldenRecord::get(self::$dbconnection, (int)$id);
+            $existing = GoldenRecord::get(self::$dbconnection, (int)$id[0]);
             if (!$existing) {
                 self::sendResponse(404, ['error' => 'Not found']);
                 return;

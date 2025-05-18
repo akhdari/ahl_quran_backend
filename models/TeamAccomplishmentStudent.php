@@ -41,12 +41,12 @@
 		}
 
 		/** Find a record by primary key. */
-		public static function get(DB $db, int $id): ?self {
+		public static function get(DB $db, int $team_accomplishment_id, int $student_id): ?self {
 		    $conn = $db->getConnection();
-		    $sql = "SELECT * FROM " . self::$tableName . " WHERE team_accomplishment_id = ?";
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE team_accomplishment_id = ? AND student_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
+		    $stmt->bind_param('ii', $team_accomplishment_id, $student_id);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
 		    $row = $result->fetch_assoc();
@@ -54,29 +54,36 @@
 		}
 
 		/** Show all data. */
-		public static function getAll(DB $db): ?self {
+		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();
 		    $sql = "SELECT * FROM " . self::$tableName;
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->execute();
 		    $result = $stmt->get_result();
-		    $row = $result->fetch_assoc();
-		    return $row ? new self($row) : null;
+		    $objects = [];
+		    while ($row = $result->fetch_assoc()) {
+		        $objects[] = new self($row);
+		    }
+		    return $objects;
 		}
 
 		/** Update this record in the database. */
 		public function update(DB $db): bool {
 		    $conn = $db->getConnection();
 		    $fields = get_object_vars($this);
-		    $id = $fields['team_accomplishment_id'];
+		    $team_accomplishment_id = $fields['team_accomplishment_id'];
 		    unset($fields['team_accomplishment_id']);
+			$student_id = $fields['student_id'];
+		    unset($fields['student_id']);
 		    $sets = array_map(fn($k) => "$k = ?", array_keys($fields));
 		    $types = str_repeat('s', count($fields)) . 'i';
 		    $values = array_values($fields);
-		    $values[] = $id;
+		    $values[] = $team_accomplishment_id;
+			$values[] = $student_id;
+
 		    $sql = "UPDATE " . self::$tableName .
-		           " SET " . implode(', ', $sets) . " WHERE team_accomplishment_id = ?";
+		           " SET " . implode(', ', $sets) . " WHERE team_accomplishment_id = ? AND student_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
 		    $stmt->bind_param($types, ...$values);
@@ -86,11 +93,10 @@
 		/** Delete this record from the database. */
 		public function delete(DB $db): bool {
 		    $conn = $db->getConnection();
-		    $id = $this->team_accomplishment_id;
-		    $sql = "DELETE FROM " . self::$tableName . " WHERE team_accomplishment_id = ?";
+		    $sql = "DELETE FROM " . self::$tableName . " WHERE team_accomplishment_id = ? AND student_id = ?";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('i', $id);
+		    $stmt->bind_param('ii', $this->team_accomplishment_id, $this->student_id);
 		    return $stmt->execute();
 		}
 
