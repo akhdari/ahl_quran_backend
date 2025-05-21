@@ -220,6 +220,17 @@ For each resource below, the following RESTful endpoints are available unless ot
 - **PATCH** `/api/v1/weeklyschedules/:id`
 - **DELETE** `/api/v1/weeklyschedules/:id`
 
+### Attendance
+
+- **GET** `/api/v1/attendances`
+- **GET** `/api/v1/attendances/user/:userId`
+- **GET** `/api/v1/attendances/date/:date`
+- **GET** `/api/v1/attendances/from/:date`
+- **GET** `/api/v1/attendances/user/:userId/date/:date`
+- **POST** `/api/v1/attendances`
+- **POST** `/api/v1/attendances/bulk`
+- **PATCH** `/api/v1/attendances/:id`
+
 ---
 
 ## Notes
@@ -425,3 +436,24 @@ _Response:_
   "message": "Deleted"
 }
 ```
+### Attendance ex
+
+### GET `/api/v1/attendances`  
+Get all attendance records.
+
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "user_id": 101,
+    "attendance_date": "2025-05-20",
+    "status": "present"
+  },
+  {
+    "id": 2,
+    "user_id": 102,
+    "attendance_date": "2025-05-20",
+    "status": "absent"
+  }
+]
