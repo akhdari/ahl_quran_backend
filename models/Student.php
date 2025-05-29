@@ -59,6 +59,21 @@
 		    return $row ? new self($row) : null;
 		}
 
+
+		/** Find a record by primary key. */
+		public static function getByAccountId(DB $db, int $id): ?self {
+		    $conn = $db->getConnection();
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE student_account_id = ?";
+		    $stmt = $conn->prepare($sql);
+		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+		    $stmt->bind_param('i', $id);
+		    $stmt->execute();
+		    $result = $stmt->get_result();
+		    $row = $result->fetch_assoc();
+		    return $row ? new self($row) : null;
+		}
+
+
 		/** Show all data. */
 		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();

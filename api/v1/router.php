@@ -3,7 +3,7 @@
 class Router
 {
     private static $instance = null;
-    private $routes = [];
+    private $routes = []; // [{"endpoint","controller","name_method"}, {} ....]
     private $prefix = '';
     private $basePath = '';
 
