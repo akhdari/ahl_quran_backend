@@ -46,6 +46,17 @@
 		    return new self($data);
 		}
 
+		/** Insert a new record and return the new object. */
+		public static function createAssociatedProfile(DB $db, int $account_id): self {
+		    $conn = $db->getConnection();
+			$sql = "INSERT INTO " . self::$tableName . " (student_account_id) VALUES (?)";
+		    $stmt = $conn->prepare($sql);
+		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+		    $stmt->bind_param('i', $account_id);
+			$stmt->execute();
+		    return Student::get($db,$db->lastInsert());
+		}
+
 		/** Find a record by primary key. */
 		public static function get(DB $db, int $id): ?self {
 		    $conn = $db->getConnection();

@@ -45,6 +45,7 @@ $router->get('/', fn() => var_dump(json_encode(['response' => 'API v1'])));
 
 // Routes for authentication
 $router->post('/auth/login',  ['AccountInfoController', 'auth']);
+$router->post('/auth/signup',  ['AccountInfoController', 'newAccount']);
 
 
 

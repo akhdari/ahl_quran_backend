@@ -5,9 +5,9 @@ USE `quran`;
 
 CREATE TABLE `account_info` (
   `account_id` INT NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `passcode` varchar(200) NOT NULL,
-  `account_type` enum('guardian','student','teacher','superviser') DEFAULT NULL,
+  `username` varchar(50) DEFAULT '',
+  `passcode` varchar(200) DEFAULT '',
+  `account_type` enum('guardian','student','teacher','superviser') DEFAULT "student",
   PRIMARY KEY (`account_id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -23,13 +23,13 @@ CREATE TABLE `contact_info` (
 
 CREATE TABLE `team_accomplishment` (
   `team_accomplishment_id` INT NOT NULL AUTO_INCREMENT,
-  `from_surah` varchar(50) NOT NULL,
+  `from_surah` varchar(50) DEFAULT '',
   `from_ayah` INT NOT NULL,
-  `to_surah` varchar(50) NOT NULL,
+  `to_surah` varchar(50) DEFAULT '',
   `to_ayah` INT NOT NULL,
-  `accompanying_curriculum_subject` varchar(50) NOT NULL,
-  `accompanying_curriculum_lesson` varchar(50) NOT NULL,
-  `tajweed_lesson` varchar(50) NOT NULL,
+  `accompanying_curriculum_subject` varchar(50) DEFAULT '',
+  `accompanying_curriculum_lesson` varchar(50) DEFAULT '',
+  `tajweed_lesson` varchar(50) DEFAULT '',
   PRIMARY KEY (`team_accomplishment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -49,7 +49,7 @@ CREATE TABLE `guardian` (
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
-  `relationship` enum('father','mother','brother','sister','uncle','aunt','grandfather','grandmother','other') DEFAULT NULL,
+  `relationship` enum('father','mother','brother','sister','uncle','aunt','grandfather','grandmother','other') DEFAULT "father",
   `guardian_contact_id` INT DEFAULT NULL,
   `guardian_account_id` INT DEFAULT NULL,
   `home_address` varchar(100) DEFAULT NULL,
@@ -68,8 +68,8 @@ CREATE TABLE `teacher` (
   `work_hours` INT DEFAULT 0,
   `teacher_contact_id` INT DEFAULT NULL,
   `teacher_account_id` INT DEFAULT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
+  `first_name` varchar(50) DEFAULT '',
+  `last_name` varchar(50) DEFAULT '',
   `profile_image` varchar(255) DEFAULT NULL,
 
   PRIMARY KEY (`teacher_id`),
@@ -83,8 +83,8 @@ CREATE TABLE `teacher` (
 CREATE TABLE `lecture` (
   `lecture_id` INT NOT NULL AUTO_INCREMENT,
   `team_accomplishment_id` INT DEFAULT NULL,
-  `lecture_name_ar` varchar(50) NOT NULL,
-  `lecture_name_en` varchar(50) NOT NULL,
+  `lecture_name_ar` varchar(50) DEFAULT '',
+  `lecture_name_en` varchar(50) DEFAULT '',
   `shown_on_website` BOOLEAN DEFAULT NULL,
   `circle_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`lecture_id`),
@@ -110,9 +110,9 @@ CREATE TABLE `golden_record` (
   `golden_record_id` INT NOT NULL AUTO_INCREMENT,
   `student_id` INT NOT NULL,
   `record_type` enum('seal','figurative') DEFAULT NULL,
-  `riwayah` enum('Hafs an Asim','Shubah an Asim','Warsh an Nafi','Qalun an Nafi','Al-Duri an Abi Amr','As-Susi an Abi Amr','Hisham an Ibn Amir','Ibn Dhakwan an Ibn Amir','Khalaf an Hamzah','Khallad an Hamzah','Al-Duri an Al-Kisai','Abu Al-Harith an Al-Kisai','Isa ibn Mina (Abu Jaafar)','Ibn Wardan an Abu Jaafar','Ibn Jammaz an Abu Jaafar','Ruways an Yaqoub','Rawh an Yaqoub','Ishaq an Khalaf','Idris an Khalaf') NOT NULL,
+  `riwayah` enum('Hafs an Asim','Shubah an Asim','Warsh an Nafi','Qalun an Nafi','Al-Duri an Abi Amr','As-Susi an Abi Amr','Hisham an Ibn Amir','Ibn Dhakwan an Ibn Amir','Khalaf an Hamzah','Khallad an Hamzah','Al-Duri an Al-Kisai','Abu Al-Harith an Al-Kisai','Isa ibn Mina (Abu Jaafar)','Ibn Wardan an Abu Jaafar','Ibn Jammaz an Abu Jaafar','Ruways an Yaqoub','Rawh an Yaqoub','Ishaq an Khalaf','Idris an Khalaf') DEFAULT 'Hafs an Asim',
   `date_of_completion` date NOT NULL,
-  `school_name` varchar(50) NOT NULL,
+  `school_name` varchar(50) DEFAULT '',
   PRIMARY KEY (`golden_record_id`),
   CONSTRAINT `fk_golden_record_student_id` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -121,7 +121,7 @@ CREATE TABLE `golden_record` (
 CREATE TABLE `formal_education_info` (
   `student_id` INT NOT NULL,
   `school_name` varchar(50) DEFAULT NULL,
-  `school_type` enum('Public','Private','International') DEFAULT NULL,
+  `school_type` enum('Public','Private','International') DEFAULT 'Public',
   `grade` varchar(50) DEFAULT NULL,
   `academic_level` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
@@ -140,12 +140,12 @@ CREATE TABLE `medical_info` (
 
 CREATE TABLE `personal_info` (
   `student_id` INT NOT NULL,
-  `first_name_ar` varchar(50) NOT NULL,
-  `last_name_ar` varchar(50) NOT NULL,
+  `first_name_ar` varchar(50) DEFAULT '',
+  `last_name_ar` varchar(50) DEFAULT '',
   `first_name_en` varchar(50) DEFAULT NULL,
   `last_name_en` varchar(50) DEFAULT NULL,
   `nationality` varchar(50) DEFAULT NULL,
-  `sex` enum('male','female') NOT NULL,
+  `sex` enum('male','female') DEFAULT 'male',
   `date_of_birth` date DEFAULT NULL,
   `place_of_birth` varchar(50) DEFAULT NULL,
   `home_address` varchar(100) DEFAULT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE `team_accomplishment_student` (
 CREATE TABLE `lecture_student` (
   `lecture_id` INT NOT NULL,
   `student_id` INT NOT NULL,
-  `attendance_status` enum('present','absent with excuse','late','absent without excuse') NOT NULL,
+  `attendance_status` enum('present','absent with excuse','late','absent without excuse') DEFAULT 'present',
   `lecture_date` date DEFAULT NULL,
   PRIMARY KEY (`lecture_id`,`student_id`),
   UNIQUE KEY `lecture_id` (`lecture_id`,`student_id`,`lecture_date`),
@@ -211,7 +211,7 @@ CREATE TABLE `lecture_teacher` (
   `teacher_id` INT NOT NULL,
   `lecture_id` INT NOT NULL,
   `lecture_date` date DEFAULT NULL,
-  `attendance_status` varchar(20) NOT NULL,
+  `attendance_status` varchar(20) DEFAULT '',
   PRIMARY KEY (`teacher_id`,`lecture_id`,`lecture_date`),
   FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -219,7 +219,7 @@ CREATE TABLE `lecture_teacher` (
 
 CREATE TABLE `weekly_schedule` (
   `weekly_schedule_id` INT NOT NULL AUTO_INCREMENT,
-  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') DEFAULT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
   `lecture_id` INT NOT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE `weekly_schedule` (
 
 CREATE TABLE `exam_level` (
   `exam_level_id` INT NOT NULL AUTO_INCREMENT,
-  `level` varchar(70) NOT NULL,
+  `level` varchar(70) DEFAULT '',
   `from_surah` varchar(50) DEFAULT NULL,
   `from_ayah` INT DEFAULT NULL,
   `to_surah` varchar(50) DEFAULT NULL,
@@ -243,8 +243,8 @@ CREATE TABLE `exam_level` (
 CREATE TABLE `exam` (
   `exam_id` INT NOT NULL AUTO_INCREMENT,
   `exam_level_id` INT NOT NULL,
-  `exam_name_ar` varchar(50) NOT NULL,
-  `exam_name_en` varchar(50) NOT NULL,
+  `exam_name_ar` varchar(50) DEFAULT '',
+  `exam_name_en` varchar(50) DEFAULT '',
   `exam_type` enum('ajzaa','all') DEFAULT NULL,
   `exam_sucess_min_point` INT NOT NULL DEFAULT 0,
   `exam_max_point` INT NOT NULL DEFAULT 0,
@@ -301,7 +301,7 @@ CREATE TABLE `exam_teacher` (
 
 CREATE TABLE `request_copy` (
   `request_copy_id` INT NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
+  `username` varchar(50) DEFAULT '',
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,

@@ -21,6 +21,10 @@ class DB {
         return self::$instance;
     }
     
+    public function lastInsert() {
+        return $this->conn->insert_id;
+    }
+
     public function connect() {
         if ($this->conn === null || !$this->conn->ping()) {
             $this->conn = new mysqli($this->server, $this->user, $this->pass, $this->db);
