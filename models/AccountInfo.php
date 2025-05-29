@@ -109,8 +109,8 @@
 		    $sql = "SELECT * FROM " . self::$tableName . " WHERE passcode = ? AND username = ? AND account_type = ? ";
 		    $stmt = $conn->prepare($sql);
 		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
-		    $stmt->bind_param('iii', $data['passcode'], $data['username'],$data["account_type"]);
-		    $stmt->execute();
+		    $stmt->bind_param('iss', $data['passcode'], $data['username'],$data["account_type"]);
+			$stmt->execute();
 		    $result = $stmt->get_result();
 		    $row = $result->fetch_assoc();
 		    return $row ? (new self($row))->account_id: -1;

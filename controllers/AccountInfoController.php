@@ -20,7 +20,7 @@ class AccountInfoController extends Controller
 
             $account_id = AccountInfo::checkCredentials(self::$dbconnection, $data);
             if ($account_id == -1) {
-                self::sendResponse(500, ['error' => 'the cridentals are wrong (pw or username or account_type is wrong) !!']);
+                self::sendResponse(500, ['error' => 'the credentials are wrong (pw or username or account_type is wrong) !!']);
                 return;
             }
 

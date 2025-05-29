@@ -35,18 +35,16 @@ require_once '../../controllers/TeamAccomplishmentStudentController.php';
 require_once '../../controllers/WeeklyScheduleController.php';
 require_once '../../controllers/SupervisorAttendanceController.php';
 
-	// Routes for authentication
-	$router->post('/auth/login',  ['AccountInfoController', 'auth']);
-
-
-
 
 Controller::setDbConnection((new DB("localhost", "root", "", "quran")));
-$router = Router::getInstance("/quran/ahl_quran_backend");
+$router = Router::getInstance("/dev_run/Project/ahl_quran_backend");
 $router->setPrefix('/api/v1');
 
 
 $router->get('/', fn() => var_dump(json_encode(['response' => 'API v1'])));
+
+// Routes for authentication
+$router->post('/auth/login',  ['AccountInfoController', 'auth']);
 
 
 
