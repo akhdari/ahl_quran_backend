@@ -106,5 +106,32 @@
 		    return $stmt->execute();
 		}
 
+
+		/** Find a record by primary key. */
+		public static function getStudentLectures(DB $db,  int $student_id ): ?self {
+		    $conn = $db->getConnection();
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE student_id = ?";
+		    $stmt = $conn->prepare($sql);
+		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+		    $stmt->bind_param('i',$student_id);
+		    $stmt->execute();
+		    $result = $stmt->get_result();
+		    $row = $result->fetch_assoc();
+		    return $row ? new self($row) : null;
+		}
+
+		/** Find a record by primary key. */
+		public static function getLecturesStudents(DB $db, int $lecture_id ): ?self {
+		    $conn = $db->getConnection();
+		    $sql = "SELECT * FROM " . self::$tableName . " WHERE lecture_id = ?";
+		    $stmt = $conn->prepare($sql);
+		    if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+		    $stmt->bind_param('i', $lecture_id);
+		    $stmt->execute();
+		    $result = $stmt->get_result();
+		    $row = $result->fetch_assoc();
+		    return $row ? new self($row) : null;
+		}
+
 }
 

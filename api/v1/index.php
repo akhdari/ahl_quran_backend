@@ -140,6 +140,7 @@ $router->delete('/lecturecontents/:id',  ['LectureContentController', 'delete'])
 
 // Routes for LectureController
 $router->get('/lectures',  ['LectureController', 'getAll']);
+$router->get('/lectures/ar_name-and-id',  ['LectureContentController', 'getARNameAndIdOnly']);
 $router->get('/lectures/:id',  ['LectureController', 'getOne']);
 $router->post('/lectures',  ['LectureController', 'save']);
 $router->patch('/lectures/:id',  ['LectureController', 'update']);
@@ -149,6 +150,8 @@ $router->delete('/lectures/:id',  ['LectureController', 'delete']);
 // Routes for LectureStudentController
 $router->get('/lecturestudents',  ['LectureStudentController', 'getAll']);
 $router->get('/lecturestudents/lectures/:id/students/:id',  ['LectureStudentController', 'getOne']);
+$router->get('/lecturestudents/lectures/students/:id',  ['LectureStudentController', 'getStudentLectures']);
+$router->get('/lecturestudents/lectures/:id/students',  ['LectureStudentController', 'getLecturesStudents']);
 $router->post('/lecturestudents',  ['LectureStudentController', 'save']);
 $router->patch('/lecturestudents/lectures/:id/students/:id',  ['LectureStudentController', 'update']);
 $router->delete('/lecturestudents/lectures/:id/students/:id',  ['LectureStudentController', 'delete']);
@@ -244,6 +247,7 @@ $router->delete('/weeklyschedules/:id',  ['WeeklyScheduleController', 'delete'])
 
 // Routes for StudentLectureAchievementsController
 $router->get('/achievements',  ['StudentLectureAchievementsController', 'getAll']);
+$router->get('/achievements/latest',  ['StudentLectureAchievementsController', 'getLatest']);
 $router->get('/achievements/lectures/:id/students/:id',  ['StudentLectureAchievementsController', 'getOne']);
 $router->post('/achievements',  ['StudentLectureAchievementsController', 'save']);
 $router->patch('/achievements/lectures/:id/students/:id',  ['StudentLectureAchievementsController', 'update']);

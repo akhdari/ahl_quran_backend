@@ -19,6 +19,19 @@ class LectureController extends Controller
         }
     }
 
+    public static function getARNameAndIdOnly() {
+        try {
+            $obj = Lecture::getIdAndArNameOnly(self::$dbconnection);
+            if (!$obj) {
+                self::sendResponse(404, ['error' => 'Not data']);
+            } else {
+                self::sendResponse(200, $obj);
+            }
+        } catch (\Exception $e) {
+            self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
+
     public static function getOne(int ...$id) {
         try {
             $obj = Lecture::get(self::$dbconnection, (int)$id[0]);

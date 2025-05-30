@@ -109,5 +109,25 @@
 		    return $stmt->execute();
 		}
 
+
+		/** Get only lecture_id and lecture_name_ar for all lectures. */
+		public static function getIdAndArNameOnly(DB $db): array {
+			$conn = $db->getConnection();
+			$sql = "SELECT lecture_id, lecture_name_ar FROM " . self::$tableName;
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			
+			$lectures = [];
+			while ($row = $result->fetch_assoc()) {
+				$lectures[] = [
+					'lecture_id' => $row['lecture_id'],
+					'lecture_name_ar' => $row['lecture_name_ar']
+				];
+			}
+			return $lectures;
+		}
+
 }
 

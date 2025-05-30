@@ -84,4 +84,30 @@ class LectureStudentController extends Controller
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
     }
+
+    public static function getStudentLectures(int ...$id) {
+        try {
+            $obj = LectureStudent::getStudentLectures(self::$dbconnection, (int)$id[0]);
+            if (!$obj) {
+                self::sendResponse(404, ['error' => 'Not found']);
+            } else {
+                self::sendResponse(200, $obj);
+            }
+        } catch (\Exception $e) {
+            self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
+
+    public static function getLecturesStudents(int ...$id){
+        try {
+            $obj = LectureStudent::getLecturesStudents(self::$dbconnection, (int)$id[0]);
+            if (!$obj) {
+                self::sendResponse(404, ['error' => 'Not found']);
+            } else {
+                self::sendResponse(200, $obj);
+            }
+        } catch (\Exception $e) {
+            self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
 }
