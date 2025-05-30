@@ -27,6 +27,7 @@ require_once '../../controllers/MedicalInfoController.php';
 require_once '../../controllers/PersonalInfoController.php';
 require_once '../../controllers/RequestCopyController.php';
 require_once '../../controllers/StudentController.php';
+require_once '../../controllers/StudentLectureAchievementsController.php';
 require_once '../../controllers/SubscriptionInfoController.php';
 require_once '../../controllers/SupervisorController.php';
 require_once '../../controllers/TeacherController.php';
@@ -239,6 +240,16 @@ $router->get('/weeklyschedules/:id',  ['WeeklyScheduleController', 'getOne']);
 $router->post('/weeklyschedules',  ['WeeklyScheduleController', 'save']);
 $router->patch('/weeklyschedules/:id',  ['WeeklyScheduleController', 'update']);
 $router->delete('/weeklyschedules/:id',  ['WeeklyScheduleController', 'delete']);
+
+
+// Routes for StudentLectureAchievementsController
+$router->get('/achievements',  ['StudentLectureAchievementsController', 'getAll']);
+$router->get('/achievements/lectures/:id/students/:id',  ['StudentLectureAchievementsController', 'getOne']);
+$router->post('/achievements',  ['StudentLectureAchievementsController', 'save']);
+$router->patch('/achievements/lectures/:id/students/:id',  ['StudentLectureAchievementsController', 'update']);
+$router->delete('/achievements/lectures/:id/students/:id',  ['StudentLectureAchievementsController', 'delete']);
+
+
 
 // Routes for AttendanceController
 // Get all attendance records

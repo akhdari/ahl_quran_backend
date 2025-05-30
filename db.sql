@@ -312,3 +312,23 @@ CREATE TABLE `request_copy` (
   PRIMARY KEY `request_copy` (`request_copy_id`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+CREATE TABLE `student_lecture_achievements` (
+  `lecture_id` INT NOT NULL,
+  `student_id` INT NOT NULL,
+  `achievement_type` enum('memorization','minor-review','major-review') DEFAULT NULL,
+  `lecture_date` date DEFAULT NULL,
+  `from_surah` varchar(50) DEFAULT '',
+  `from_ayah` INT NOT NULL,
+  `to_surah` varchar(50) DEFAULT '',
+  `to_ayah` INT NOT NULL,
+  `teacher_note` varchar(255) DEFAULT '',
+
+
+  PRIMARY KEY (`lecture_id`,`student_id`),
+  UNIQUE KEY `lecture_id` (`lecture_id`,`student_id`,`lecture_date`),
+  KEY `student_lecture_achievements_ibfk_2` (`student_id`),
+  CONSTRAINT `student_lecture_achievements_ibfk_1` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `student_lecture_achievements_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
