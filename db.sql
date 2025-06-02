@@ -163,7 +163,7 @@ CREATE TABLE `subscription_info` (
   `enrollment_date` date NOT NULL,
   `exit_date` date DEFAULT NULL,
   `exit_reason` text DEFAULT NULL,
-  `is_exempt_from_payment` tinyINT NOT NULL DEFAULT 0,
+  `is_exempt_from_payment` BOOLEAN NOT NULL DEFAULT 0,
   `exemption_percentage` decimal(5,2) DEFAULT 0.00,
   PRIMARY KEY (`subscription_id`),
   KEY `student_id` (`student_id`),
@@ -332,3 +332,160 @@ CREATE TABLE `student_lecture_achievements` (
   CONSTRAINT `student_lecture_achievements_ibfk_1` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `student_lecture_achievements_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+
+-- Insert initial data into the tables
+
+-- account_info
+INSERT INTO account_info (username, passcode, account_type) VALUES
+('student1', 'pass1', 'student'),
+('teacher1', 'pass2', 'teacher'),
+('guardian1', 'pass3', 'guardian'),
+('student2', 'pass4', 'student'),
+('teacher2', 'pass5', 'teacher'),
+('guardian2', 'pass6', 'guardian');
+
+-- contact_info
+INSERT INTO contact_info (email, phone_number) VALUES
+('student1@email.com', '1111111111'),
+('teacher1@email.com', '2222222222'),
+('guardian1@email.com', '3333333333'),
+('student2@email.com', '4444444444'),
+('teacher2@email.com', '5555555555'),
+('guardian2@email.com', '6666666666');
+
+-- team_accomplishment
+INSERT INTO team_accomplishment (from_surah, from_ayah, to_surah, to_ayah, accompanying_curriculum_subject, accompanying_curriculum_lesson, tajweed_lesson) VALUES
+('Al-Fatiha', 1, 'Al-Baqara', 5, 'Math', 'Lesson 1', 'Noon Saakin'),
+('Al-Baqara', 6, 'Al-Imran', 10, 'Science', 'Lesson 2', 'Meem Saakin'),
+('Al-Imran', 11, 'An-Nisa', 15, 'Arabic', 'Lesson 3', 'Qalqalah');
+
+-- guardian
+INSERT INTO guardian (first_name, last_name, date_of_birth, relationship, guardian_contact_id, guardian_account_id, home_address, job) VALUES
+('Ali', 'Ahmad', '1970-01-01', 'father', 3, 3, 'Address 1', 'Engineer'),
+('Omar', 'Saeed', '1975-02-02', 'father', 6, 6, 'Address 2', 'Doctor'),
+('Fatima', 'Hassan', '1980-03-03', 'mother', 3, 3, 'Address 3', 'Teacher');
+
+-- teacher
+INSERT INTO teacher (work_hours, teacher_contact_id, teacher_account_id, first_name, last_name) VALUES
+(40, 2, 2, 'Mohamed', 'Yousef'),
+(35, 5, 5, 'Sara', 'Ali'),
+(30, 2, 2, 'Khaled', 'Mahmoud');
+
+-- lecture (team_accomplishment_id: 1,2,3)
+INSERT INTO lecture (team_accomplishment_id, lecture_name_ar, lecture_name_en, shown_on_website, circle_type) VALUES
+(1, 'دائرة 1', 'Circle 1', 1, 'boys'),
+(2, 'دائرة 2', 'Circle 2', 1, 'girls'),
+(3, 'دائرة 3', 'Circle 3', 0, 'boys');
+
+-- student (guardian_id: 1,2,3; contact_id: 1,4,3; account_id: 1,4,1)
+INSERT INTO student (guardian_id, student_contact_id, student_account_id) VALUES
+(1, 1, 1),
+(2, 4, 4),
+(3, 3, 1);
+
+-- golden_record (student_id: 1,2,3; record_type: enum; riwayah: enum)
+INSERT INTO golden_record (student_id, record_type, riwayah, date_of_completion, school_name) VALUES
+(1, 'seal', 'Hafs an Asim', '2023-01-01', 'Quran School 1'),
+(2, 'figurative', 'Warsh an Nafi', '2023-02-01', 'Quran School 2'),
+(3, 'seal', 'Qalun an Nafi', '2023-03-01', 'Quran School 3');
+
+-- formal_education_info (student_id: 1,2,3; school_type: enum)
+INSERT INTO formal_education_info (student_id, school_name, school_type, grade, academic_level) VALUES
+(1, 'Al-Azhar', 'Public', '5', 'Primary'),
+(2, 'Al-Nour', 'Private', '6', 'Primary'),
+(3, 'Al-Huda', 'International', '7', 'Secondary');
+
+-- medical_info (student_id: 1,2,3; blood_type: enum)
+INSERT INTO medical_info (student_id, blood_type, allergies, diseases, diseases_causes) VALUES
+(1, 'A+', 'None', 'None', NULL),
+(2, 'B-', 'Peanuts', 'Asthma', 'Dust'),
+(3, 'O+', 'None', 'None', NULL);
+
+-- personal_info (student_id: 1,2,3; sex: enum)
+INSERT INTO personal_info (student_id, first_name_ar, last_name_ar, first_name_en, last_name_en, nationality, sex, date_of_birth, place_of_birth, home_address, father_status, mother_status) VALUES
+(1, 'أحمد', 'علي', 'Ahmed', 'Ali', 'Egyptian', 'male', '2010-05-10', 'Cairo', 'Cairo Address', 'alive', 'alive'),
+(2, 'سارة', 'محمد', 'Sara', 'Mohamed', 'Egyptian', 'female', '2011-06-15', 'Giza', 'Giza Address', 'alive', 'alive'),
+(3, 'خالد', 'محمود', 'Khaled', 'Mahmoud', 'Egyptian', 'male', '2012-07-20', 'Alexandria', 'Alex Address', 'alive', 'alive');
+
+-- subscription_info (student_id: 1,2,3)
+INSERT INTO subscription_info (student_id, enrollment_date, exit_date, exit_reason, is_exempt_from_payment, exemption_percentage) VALUES
+(1, '2022-09-01', NULL, NULL, 0, 0.00),
+(2, '2022-09-01', NULL, NULL, 1, 50.00),
+(3, '2022-09-01', NULL, NULL, 0, 0.00);
+
+-- team_accomplishment_student (team_accomplishment_id: 1,2,3; student_id: 1,2,3)
+INSERT INTO team_accomplishment_student (team_accomplishment_id, student_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+-- lecture_student (lecture_id: 1,2,3; student_id: 1,2,3; attendance_status: enum)
+INSERT INTO lecture_student (lecture_id, student_id, attendance_status, lecture_date) VALUES
+(1, 1, 'present', '2023-01-01'),
+(2, 2, 'late', '2023-01-02'),
+(2, 1, 'present', '2023-01-01'),
+(3, 3, 'absent with excuse', '2023-01-03');
+;
+
+-- lecture_content (student_id: 1,2,3; lecture_id: 1,2,3; type: any string)
+INSERT INTO lecture_content (from_surah, from_ayah, to_surah, to_ayah, observation, student_id, lecture_id, type) VALUES
+('Al-Fatiha', 1, 'Al-Baqara', 5, 'Good progress', 1, 1, 'memorization'),
+('Al-Baqara', 6, 'Al-Imran', 10, 'Needs improvement', 2, 2, 'review'),
+('Al-Imran', 11, 'An-Nisa', 15, 'Excellent', 3, 3, 'memorization');
+
+-- lecture_teacher (teacher_id: 1,2,3; lecture_id: 1,2,3; attendance_status: any string)
+INSERT INTO lecture_teacher (teacher_id, lecture_id, lecture_date, attendance_status) VALUES
+(1, 1, '2023-01-01', 'present'),
+(2, 2, '2023-01-02', 'present'),
+(3, 3, '2023-01-03', 'absent');
+
+-- weekly_schedule (lecture_id: 1,2,3; day_of_week: enum)
+INSERT INTO weekly_schedule (day_of_week, start_time, end_time, lecture_id) VALUES
+('Monday', '08:00:00', '10:00:00', 1),
+('Tuesday', '09:00:00', '11:00:00', 2),
+('Wednesday', '10:00:00', '12:00:00', 3);
+
+-- exam_level
+INSERT INTO exam_level (level, from_surah, from_ayah, to_surah, to_ayah) VALUES
+('Level 1', 'Al-Fatiha', 1, 'Al-Baqara', 5),
+('Level 2', 'Al-Baqara', 6, 'Al-Imran', 10),
+('Level 3', 'Al-Imran', 11, 'An-Nisa', 15);
+
+-- exam (exam_level_id: 1,2,3; exam_type: enum)
+INSERT INTO exam (exam_level_id, exam_name_ar, exam_name_en, exam_type, exam_sucess_min_point, exam_max_point) VALUES
+(1, 'امتحان 1', 'Exam 1', 'ajzaa', 50, 100),
+(2, 'امتحان 2', 'Exam 2', 'all', 60, 100),
+(3, 'امتحان 3', 'Exam 3', 'ajzaa', 70, 100);
+
+-- appreciation (note: enum)
+INSERT INTO appreciation (appreciation_id, point_min, point_max, note) VALUES
+(1, 0, 49, "didn’t pass"),
+(2, 50, 74, "good"),
+(3, 75, 100, "excellent");
+
+-- exam_student (exam_id: 1,2,3; student_id: 1,2,3; appreciation_id: 1,2,3)
+INSERT INTO exam_student (exam_id, student_id, appreciation_id, point_hifd, point_tajwid_applicative, point_tajwid_theoric, point_performance, point_deduction_tal9ini, point_deduction_tanbihi, point_deduction_tajwidi, date_take_exam) VALUES
+(1, 1, 3, 90, 95, 90, 85, 0, 0, 0, '2023-02-01'),
+(2, 2, 2, 70, 75, 80, 65, 1, 2, 0, '2023-02-02'),
+(3, 3, 1, 40, 50, 55, 45, 2, 1, 3, '2023-02-03');
+
+-- exam_teacher (exam_id: 1,2,3; teacher_id: 1,2,3)
+INSERT INTO exam_teacher (exam_id, teacher_id, date) VALUES
+(1, 1, '2023-02-01'),
+(2, 2, '2023-02-02'),
+(3, 3, '2023-02-03');
+
+-- request_copy
+INSERT INTO request_copy (username, first_name, last_name, email, phone_number, description) VALUES
+('requester1', 'First1', 'Last1', 'req1@email.com', '123123123', 'Need a copy 1'),
+('requester2', 'First2', 'Last2', 'req2@email.com', '456456456', 'Need a copy 2'),
+('requester3', 'First3', 'Last3', 'req3@email.com', '789789789', 'Need a copy 3');
+
+-- student_lecture_achievements (achievement_type: enum)
+INSERT INTO student_lecture_achievements (lecture_id, student_id, achievement_type, lecture_date, from_surah, from_ayah, to_surah, to_ayah, teacher_note) VALUES
+(1, 1, 'memorization', '2023-01-01', 'Al-Fatiha', 1, 'Al-Baqara', 5, 'Excellent'),
+(2, 2, 'minor-review', '2023-01-02', 'Al-Baqara', 6, 'Al-Imran', 10, 'Good'),
+(3, 3, 'major-review', '2023-01-03', 'Al-Imran', 11, 'An-Nisa', 15, 'Needs improvement');

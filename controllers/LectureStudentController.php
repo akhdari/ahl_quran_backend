@@ -9,11 +9,7 @@ class LectureStudentController extends Controller
     public static function getAll() {
         try {
             $obj = LectureStudent::getAll(self::$dbconnection);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not data']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+            self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
@@ -22,11 +18,7 @@ class LectureStudentController extends Controller
     public static function getOne(int ...$id) {
         try {
             $obj = LectureStudent::get(self::$dbconnection, (int)$id[0], (int)$id[1]);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not found']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+          self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
@@ -88,11 +80,7 @@ class LectureStudentController extends Controller
     public static function getStudentLectures(int ...$id) {
         try {
             $obj = LectureStudent::getStudentLectures(self::$dbconnection, (int)$id[0]);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not found']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+          self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
@@ -101,11 +89,7 @@ class LectureStudentController extends Controller
     public static function getLecturesStudents(int ...$id){
         try {
             $obj = LectureStudent::getLecturesStudents(self::$dbconnection, (int)$id[0]);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not found']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+          self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }

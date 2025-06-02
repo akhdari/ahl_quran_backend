@@ -25,6 +25,11 @@
 		/** @var mixed $exit_reason */
 		public $exit_reason;
 
+		/** @var mixed $is_exempt_from_payment */
+		public $is_exempt_from_payment;
+
+		public $exemption_percentage;
+
 		public function __construct(array $data = []) {
 		    foreach ($data as $key => $value) {
 		        if (property_exists($this, $key)) {

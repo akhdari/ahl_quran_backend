@@ -9,11 +9,7 @@ class AppreciationController extends Controller
     public static function getAll() {
         try {
             $obj = Appreciation::getAll(self::$dbconnection);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not data']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+            self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
@@ -22,11 +18,7 @@ class AppreciationController extends Controller
     public static function getOne(int ...$id) {
         try {
             $obj = Appreciation::get(self::$dbconnection, (int)$id[0]);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not found']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+          self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }

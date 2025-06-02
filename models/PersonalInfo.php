@@ -130,5 +130,12 @@
 		    return $stmt->execute();
 		}
 
+		public static function createNewProfile(DB $db,int $student_id){
+		    $obj = new self();
+		    $obj->student_id = $student_id;
+			self::create($db, (array)$obj);
+		    return $obj;
+		}
+
 }
 

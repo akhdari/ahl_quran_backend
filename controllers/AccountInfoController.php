@@ -62,7 +62,7 @@ class AccountInfoController extends Controller
             $obj = null;
             switch ($data["account_type"]) {
                 case "guardian": $obj = Guardian::createAssociatedProfile(self::$dbconnection, $account_id); break;
-                case "student": $obj = Student::createAssociatedProfile(self::$dbconnection, $account_id); break;
+                case "student": $obj = Student::createAssociatedProfile(self::$dbconnection, $account_id);   PersonalInfo::createNewProfile(self::$dbconnection, $obj->student_id);break;
                 case "teacher": $obj = Teacher::createAssociatedProfile(self::$dbconnection, $account_id);break;
                 case "superviser": $obj = Supervisor::createAssociatedProfile(self::$dbconnection, $account_id);break;
             }
@@ -81,11 +81,7 @@ class AccountInfoController extends Controller
     public static function getAll() {
         try {
             $obj = AccountInfo::getAll(self::$dbconnection);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not data']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+            self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
@@ -94,11 +90,7 @@ class AccountInfoController extends Controller
     public static function getOne(int ...$id) {
         try {
             $obj = AccountInfo::get(self::$dbconnection, (int)$id[0]);
-            if (!$obj) {
-                self::sendResponse(404, ['error' => 'Not found']);
-            } else {
-                self::sendResponse(200, $obj);
-            }
+          self::sendResponse(200, $obj);
         } catch (\Exception $e) {
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
