@@ -60,7 +60,7 @@ class S_GuardianController extends S_Controller
 
             // Commit all
             $conn->commit();
-            self::sendResponse(201, ['message' => 'Student created successfully', 'student_id' =>  $guardian->guardian_id]);
+            self::sendResponse(201, ['message' => 'Guardian created successfully', 'guardian_id' =>  $guardian->guardian_id]);
 
         } catch (Exception $e) {
             $conn->rollback();
