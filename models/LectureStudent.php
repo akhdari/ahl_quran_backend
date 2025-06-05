@@ -106,6 +106,32 @@
 		    return $stmt->execute();
 		}
 
+		/** Delete this record from the database. */
+		public static function deleteById(DB $db ,  $lecture_id, $student_id): bool {
+			$conn = $db->getConnection();
+			$where = [];
+			$params = [];
+			$types = '';
+			if (isset($lecture_id)) {
+				$where[] = "lecture_id = ?";
+				$params[] = $lecture_id;
+				$types .= 'i';
+			}
+			if (isset($student_id)) {
+				$where[] = "student_id = ?";
+				$params[] = $student_id;
+				$types .= 'i';
+			}
+			if (empty($where)) {
+				throw new \InvalidArgumentException("At least one of lecture_id or student_id must be provided.");
+			}
+			$sql = "DELETE FROM " . self::$tableName . " WHERE " . implode(' AND ', $where);
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->bind_param($types, ...$params);
+			return $stmt->execute();
+		}
+
 
 		/** Find a record by primary key. */
 		public static function getStudentLectures(DB $db,  int $student_id ): ?self {

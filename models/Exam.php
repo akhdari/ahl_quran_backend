@@ -31,6 +31,18 @@
 		/** @var mixed $exam_max_point */
 		public $exam_max_point;
 
+		/** @var int $exam_memo_point */
+		public $exam_memo_point = 0;
+
+		/** @var int $exam_tjwid_app_point */
+		public $exam_tjwid_app_point = 0;
+
+		/** @var int $exam_tjwid_tho_point */
+		public $exam_tjwid_tho_point = 0;
+
+		/** @var int $exam_performance_point */
+		public $exam_performance_point = 0;
+
 		public function __construct(array $data = []) {
 		    foreach ($data as $key => $value) {
 		        if (property_exists($this, $key)) {

@@ -105,5 +105,31 @@
 		    return $stmt->execute();
 		}
 
+		/** Delete this record from the database. */
+		public function deleteById(DB $db, $teacher_id, $lecture_id): bool {
+			$conn = $db->getConnection();
+			$where = [];
+			$params = [];
+			$types = '';
+			if (isset($teacher_id)) {
+				$where[] = "teacher_id = ?";
+				$params[] = $teacher_id;
+				$types .= 'i';
+			}
+			if (isset($lecture_id)) {
+				$where[] = "lecture_id = ?";
+				$params[] = $lecture_id;
+				$types .= 'i';
+			}
+			if (empty($where)) {
+				throw new \InvalidArgumentException("At least one of teacher_id or lecture_id must be provided.");
+			}
+			$sql = "DELETE FROM " . self::$tableName . " WHERE " . implode(' AND ', $where);
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->bind_param($types, ...$params);
+			return $stmt->execute();
+		}
+
 }
 

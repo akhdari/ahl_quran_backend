@@ -57,6 +57,9 @@ require_once '../../vendor/autoload.php';
     require_once '../../special_controllers/Controller.php';
     require_once '../../special_controllers/S_StudentController.php';
     require_once '../../special_controllers/S_GuardianController.php';
+    require_once '../../special_controllers/exams/S_ExamRecordsController.php';
+    require_once '../../special_controllers/exams/S_ExamTeachersController.php';
+    require_once '../../special_controllers/S_LectureController.php';
 }
 
 use Dotenv\Dotenv;
@@ -309,14 +312,30 @@ $router->get('/', fn() => var_dump(json_encode(['response' => 'API v1'])));
 
 }
 
-/////////////////////
-// special routes
-/////////////////////
-$router->get('/special/students', ['S_StudentController', 'getAllStudents']);
-$router->post('/special/students/submit', ['S_StudentController', 'saveNewStudent']);
+{
+    /////////////////////
+    // special routes
+    /////////////////////
+    $router->get('/special/students', ['S_StudentController', 'getAllStudents']);
+    $router->post('/special/students/submit', ['S_StudentController', 'saveNewStudent']);
+    $router->put('/special/students/:id', ['S_StudentController', 'updateStudent']);
 
-$router->get('/special/guardians', ['S_GuardianController', 'getAllGuardians']);
-$router->post('/special/guardians/submit', ['S_GuardianController', 'saveNewGuardian']);
+    $router->get('/special/guardians', ['S_GuardianController', 'getAllGuardians']);
+    $router->post('/special/guardians/submit', ['S_GuardianController', 'saveNewGuardian']);
+    $router->put('/special/guardians/:id', ['S_GuardianController', 'updateGuardian']);
+
+    $router->get('/special/lectures', ['S_LectureController', 'getAllLectures']);
+    $router->post('/special/lectures/submit', ['S_LectureController', 'saveNewLecture']);
+    $router->put('/special/lectures/:id', ['S_LectureController', 'updateLecture']);
+
+    $router->get('/special/exams-records', ['S_ExamRecordsController', 'getAllExams']);
+    $router->post('/special/exams-records/submit', ['S_ExamRecordsController', 'saveNewExam']);
+    $router->put('/special/exams-records/:id', ['S_ExamRecordsController', 'updateExam']);
+
+    $router->get('/special/exams-teachers', ['S_ExamTeachersController', 'getAllExams']);
+    $router->post('/special/exams-teachers/submit', ['S_ExamTeachersController', 'saveNewExam']);
+    $router->put('/special/exams-teachers/:id', ['S_ExamTeachersController', 'updateExam']);
+}
 
 
 $router->run(); // Initialize database connection

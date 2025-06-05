@@ -89,7 +89,7 @@ CREATE TABLE `lecture` (
   `circle_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`lecture_id`),
   KEY `team_accomplishment_id` (`team_accomplishment_id`),
-  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`team_accomplishment_id`) REFERENCES `team_accomplishment` (`team_accomplishment_id`) ON DELETE CASCADE
+  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`team_accomplishment_id`) REFERENCES `team_accomplishment` (`team_accomplishment_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `student` (
@@ -101,7 +101,7 @@ CREATE TABLE `student` (
   KEY `guardian_id` (`guardian_id`),
   KEY `fk_contact_id` (`student_contact_id`),
   KEY `fk_account_info` (`student_account_id`),
-  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`guardian_id`) REFERENCES `guardian` (`guardian_id`) ON DELETE CASCADE,
+  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`guardian_id`) REFERENCES `guardian` (`guardian_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_contact_id` FOREIGN KEY (`student_contact_id`) REFERENCES `contact_info` (`contact_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_account_info` FOREIGN KEY (`student_account_id`) REFERENCES `account_info` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -125,17 +125,17 @@ CREATE TABLE `formal_education_info` (
   `grade` varchar(50) DEFAULT NULL,
   `academic_level` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
-  CONSTRAINT `formal_education_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE
+  CONSTRAINT `formal_education_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `medical_info` (
   `student_id` INT NOT NULL,
   `blood_type` enum('A+','A-','B+','B-','O+','O-','AB+','AB-') DEFAULT NULL,
-  `allergies` varchar(255) DEFAULT 'None',
-  `diseases` varchar(255) DEFAULT 'None',
+  `allergies` varchar(255) DEFAULT 'No',
+  `diseases` varchar(255) DEFAULT 'No',
   `diseases_causes` text DEFAULT NULL,
   PRIMARY KEY (`student_id`),
-  CONSTRAINT `medical_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE
+  CONSTRAINT `medical_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `personal_info` (
@@ -154,7 +154,7 @@ CREATE TABLE `personal_info` (
   `profile_image` varchar(255) DEFAULT NULL,
 
   PRIMARY KEY (`student_id`),
-  CONSTRAINT `personal_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE
+  CONSTRAINT `personal_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `subscription_info` (
@@ -167,7 +167,7 @@ CREATE TABLE `subscription_info` (
   `exemption_percentage` decimal(5,2) DEFAULT 0.00,
   PRIMARY KEY (`subscription_id`),
   KEY `student_id` (`student_id`),
-  CONSTRAINT `subscription_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE
+  CONSTRAINT `subscription_info_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `team_accomplishment_student` (
@@ -176,7 +176,7 @@ CREATE TABLE `team_accomplishment_student` (
   PRIMARY KEY (`team_accomplishment_id`,`student_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `team_accomplishment_student_ibfk_1` FOREIGN KEY (`team_accomplishment_id`) REFERENCES `team_accomplishment` (`team_accomplishment_id`) ON DELETE CASCADE,
-  CONSTRAINT `team_accomplishment_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE
+  CONSTRAINT `team_accomplishment_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `lecture_student` (
@@ -210,7 +210,7 @@ CREATE TABLE `lecture_content` (
 CREATE TABLE `lecture_teacher` (
   `teacher_id` INT NOT NULL,
   `lecture_id` INT NOT NULL,
-  `lecture_date` date DEFAULT NULL,
+  `lecture_date` date DEFAULT (CURRENT_DATE),
   `attendance_status` varchar(20) DEFAULT '',
   PRIMARY KEY (`teacher_id`,`lecture_id`,`lecture_date`),
   FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -225,7 +225,7 @@ CREATE TABLE `weekly_schedule` (
   `lecture_id` INT NOT NULL,
   PRIMARY KEY (`weekly_schedule_id`),
   KEY `fk_lecture_id` (`lecture_id`),
-  CONSTRAINT `fk_lecture_id` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`)
+  CONSTRAINT `fk_lecture_id` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`lecture_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `exam_level` (
@@ -248,10 +248,17 @@ CREATE TABLE `exam` (
   `exam_type` enum('ajzaa','all') DEFAULT NULL,
   `exam_sucess_min_point` INT NOT NULL DEFAULT 0,
   `exam_max_point` INT NOT NULL DEFAULT 0,
+  `exam_memo_point` INT NOT NULL DEFAULT 0,
+  `exam_tjwid_app_point` INT NOT NULL DEFAULT 0,
+  `exam_tjwid_tho_point` INT NOT NULL DEFAULT 0,
+  `exam_performance_point` INT NOT NULL DEFAULT 0,
+
   
   PRIMARY KEY (`exam_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`exam_level_id`) REFERENCES `exam_level` (`exam_level_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 CREATE TABLE `appreciation` (
   `appreciation_id` INT NOT NULL,
@@ -394,15 +401,15 @@ INSERT INTO golden_record (student_id, record_type, riwayah, date_of_completion,
 
 -- formal_education_info (student_id: 1,2,3; school_type: enum)
 INSERT INTO formal_education_info (student_id, school_name, school_type, grade, academic_level) VALUES
-(1, 'Al-Azhar', 'Public', '5', 'Primary'),
-(2, 'Al-Nour', 'Private', '6', 'Primary'),
-(3, 'Al-Huda', 'International', '7', 'Secondary');
+(1, 'Al-Azhar', 'Public', 'Grade 1', 'Primary School'),
+(2, 'Al-Nour', 'Private', 'Grade 6', 'Primary School'),
+(3, 'Al-Huda', 'International', 'Grade 7', 'Secondary School');
 
 -- medical_info (student_id: 1,2,3; blood_type: enum)
 INSERT INTO medical_info (student_id, blood_type, allergies, diseases, diseases_causes) VALUES
-(1, 'A+', 'None', 'None', NULL),
+(1, 'A+', 'No', 'No', NULL),
 (2, 'B-', 'Peanuts', 'Asthma', 'Dust'),
-(3, 'O+', 'None', 'None', NULL);
+(3, 'O+', 'No', 'No', NULL);
 
 -- personal_info (student_id: 1,2,3; sex: enum)
 INSERT INTO personal_info (student_id, first_name_ar, last_name_ar, first_name_en, last_name_en, nationality, sex, date_of_birth, place_of_birth, home_address, father_status, mother_status) VALUES

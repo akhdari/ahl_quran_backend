@@ -19,6 +19,12 @@
 		/** @var mixed $lecture_id */
 		public $lecture_id;
 
+		/** @var mixed $start_time */
+		public $start_time;
+
+		/** @var mixed $end_time */
+		public $end_time;
+
 		public function __construct(array $data = []) {
 		    foreach ($data as $key => $value) {
 		        if (property_exists($this, $key)) {
