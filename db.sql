@@ -375,64 +375,55 @@ INSERT INTO lecture (team_accomplishment_id, lecture_name_ar, lecture_name_en, s
 -- student (guardian_id: 1,2,3; contact_id: 1,4,3; account_id: 1,4,1)
 INSERT INTO student (guardian_id, student_contact_id, student_account_id) VALUES
 (1, 1, 1),
-(2, 4, 4),
+(2, 4, 4);
 
 
 -- golden_record (student_id: 1,2,3; record_type: enum; riwayah: enum)
 INSERT INTO golden_record (student_id, record_type, riwayah, date_of_completion, school_name) VALUES
 (1, 'seal', 'Hafs an Asim', '2023-01-01', 'Quran School 1'),
-(2, 'figurative', 'Warsh an Nafi', '2023-02-01', 'Quran School 2'),
-(3, 'seal', 'Qalun an Nafi', '2023-03-01', 'Quran School 3');
+(2, 'figurative', 'Warsh an Nafi', '2023-02-01', 'Quran School 2');
 
 -- formal_education_info (student_id: 1,2,3; school_type: enum)
 INSERT INTO formal_education_info (student_id, school_name, school_type, grade, academic_level) VALUES
 (1, 'Al-Azhar', 'Public', 'Grade 1', 'Primary School'),
-(2, 'Al-Nour', 'Private', 'Grade 6', 'Primary School'),
-(3, 'Al-Huda', 'International', 'Grade 7', 'Secondary School');
+(2, 'Al-Nour', 'Private', 'Grade 6', 'Primary School');
 
 -- medical_info (student_id: 1,2,3; blood_type: enum)
 INSERT INTO medical_info (student_id, blood_type, allergies, diseases, diseases_causes) VALUES
 (1, 'A+', 'No', 'No', NULL),
-(2, 'B-', 'Peanuts', 'Asthma', 'Dust'),
-(3, 'O+', 'No', 'No', NULL);
+(2, 'B-', 'Peanuts', 'Asthma', 'Dust');
 
 -- personal_info (student_id: 1,2,3; sex: enum)
 INSERT INTO personal_info (student_id, first_name_ar, last_name_ar, first_name_en, last_name_en, nationality, sex, date_of_birth, place_of_birth, home_address, father_status, mother_status) VALUES
 (1, 'أحمد', 'علي', 'Ahmed', 'Ali', 'Egyptian', 'male', '2010-05-10', 'Cairo', 'Cairo Address', 'alive', 'alive'),
-(2, 'سارة', 'محمد', 'Sara', 'Mohamed', 'Egyptian', 'female', '2011-06-15', 'Giza', 'Giza Address', 'alive', 'alive'),
-(3, 'خالد', 'محمود', 'Khaled', 'Mahmoud', 'Egyptian', 'male', '2012-07-20', 'Alexandria', 'Alex Address', 'alive', 'alive');
+(2, 'سارة', 'محمد', 'Sara', 'Mohamed', 'Egyptian', 'female', '2011-06-15', 'Giza', 'Giza Address', 'alive', 'alive');
 
 -- subscription_info (student_id: 1,2,3)
 INSERT INTO subscription_info (student_id, enrollment_date, exit_date, exit_reason, is_exempt_from_payment, exemption_percentage) VALUES
 (1, '2022-09-01', NULL, NULL, 0, 0.00),
-(2, '2022-09-01', NULL, NULL, 1, 50.00),
-(3, '2022-09-01', NULL, NULL, 0, 0.00);
+(2, '2022-09-01', NULL, NULL, 1, 50.00);
 
 -- team_accomplishment_student (team_accomplishment_id: 1,2,3; student_id: 1,2,3)
 INSERT INTO team_accomplishment_student (team_accomplishment_id, student_id) VALUES
 (1, 1),
-(2, 2),
-(3, 3);
+(2, 2);
 
 -- lecture_student (lecture_id: 1,2,3; student_id: 1,2,3; attendance_status: enum)
 INSERT INTO lecture_student (lecture_id, student_id, attendance_status, lecture_date) VALUES
 (1, 1, 'present', '2023-01-01'),
 (2, 2, 'late', '2023-01-02'),
-(2, 1, 'present', '2023-01-01'),
-(3, 3, 'absent with excuse', '2023-01-03');
+(2, 1, 'present', '2023-01-01')
 ;
 
 -- lecture_content (student_id: 1,2,3; lecture_id: 1,2,3; type: any string)
 INSERT INTO lecture_content (from_surah, from_ayah, to_surah, to_ayah, observation, student_id, lecture_id, type) VALUES
 ('Al-Fatiha', 1, 'Al-Baqara', 5, 'Good progress', 1, 1, 'memorization'),
-('Al-Baqara', 6, 'Al-Imran', 10, 'Needs improvement', 2, 2, 'review'),
-('Al-Imran', 11, 'An-Nisa', 15, 'Excellent', 3, 3, 'memorization');
+('Al-Baqara', 6, 'Al-Imran', 10, 'Needs improvement', 2, 2, 'review');
 
 -- lecture_teacher (teacher_id: 1,2,3; lecture_id: 1,2,3; attendance_status: any string)
 INSERT INTO lecture_teacher (teacher_id, lecture_id, lecture_date, attendance_status) VALUES
 (1, 1, '2023-01-01', 'present'),
-(2, 2, '2023-01-02', 'present'),
-(3, 3, '2023-01-03', 'absent');
+(2, 2, '2023-01-02', 'present');
 
 -- weekly_schedule (lecture_id: 1,2,3; day_of_week: enum)
 INSERT INTO weekly_schedule (day_of_week, start_time, end_time, lecture_id) VALUES
@@ -461,8 +452,7 @@ INSERT INTO appreciation (appreciation_id, point_min, point_max, note) VALUES
 -- exam_student (exam_id: 1,2,3; student_id: 1,2,3; appreciation_id: 1,2,3)
 INSERT INTO exam_student (exam_id, student_id, appreciation_id, point_hifd, point_tajwid_applicative, point_tajwid_theoric, point_performance, point_deduction_tal9ini, point_deduction_tanbihi, point_deduction_tajwidi, date_take_exam) VALUES
 (1, 1, 3, 90, 95, 90, 85, 0, 0, 0, '2023-02-01'),
-(2, 2, 2, 70, 75, 80, 65, 1, 2, 0, '2023-02-02'),
-(3, 3, 1, 40, 50, 55, 45, 2, 1, 3, '2023-02-03');
+(2, 2, 2, 70, 75, 80, 65, 1, 2, 0, '2023-02-02');
 
 -- exam_teacher (exam_id: 1,2,3; teacher_id: 1,2,3)
 INSERT INTO exam_teacher (exam_id, teacher_id, date) VALUES
@@ -475,5 +465,4 @@ INSERT INTO exam_teacher (exam_id, teacher_id, date) VALUES
 -- student_lecture_achievements (achievement_type: enum)
 INSERT INTO student_lecture_achievements (lecture_id, student_id, achievement_type, lecture_date, from_surah, from_ayah, to_surah, to_ayah, teacher_note) VALUES
 (1, 1, 'memorization', '2023-01-01', 'Al-Fatiha', 1, 'Al-Baqara', 5, 'Excellent'),
-(2, 2, 'minor-review', '2023-01-02', 'Al-Baqara', 6, 'Al-Imran', 10, 'Good'),
-(3, 3, 'major-review', '2023-01-03', 'Al-Imran', 11, 'An-Nisa', 15, 'Needs improvement');
+(2, 2, 'minor-review', '2023-01-02', 'Al-Baqara', 6, 'Al-Imran', 10, 'Good');
