@@ -99,8 +99,8 @@ CREATE TABLE `student` (
   `student_account_id` INT DEFAULT NULL,
   PRIMARY KEY (`student_id`),
   KEY `guardian_id` (`guardian_id`),
-  KEY `fk_contact_id` (`student_contact_id`),
-  KEY `fk_account_info` (`student_account_id`),
+  UNIQUE KEY `fk_contact_id` (`student_contact_id`),
+  UNIQUE KEY `fk_account_info` (`student_account_id`),
   CONSTRAINT `student_ibfk_1` FOREIGN KEY (`guardian_id`) REFERENCES `guardian` (`guardian_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_contact_id` FOREIGN KEY (`student_contact_id`) REFERENCES `contact_info` (`contact_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_account_info` FOREIGN KEY (`student_account_id`) REFERENCES `account_info` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -306,21 +306,6 @@ CREATE TABLE `exam_teacher` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-CREATE TABLE `request_copy` (
-  `request_copy_id` INT NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) DEFAULT '',
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `phone_number` varchar(50) DEFAULT NULL,
-  `description` TEXT DEFAULT NULL,
-
-
-  PRIMARY KEY `request_copy` (`request_copy_id`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
 CREATE TABLE `student_lecture_achievements` (
   `lecture_id` INT NOT NULL,
   `student_id` INT NOT NULL,
@@ -391,7 +376,7 @@ INSERT INTO lecture (team_accomplishment_id, lecture_name_ar, lecture_name_en, s
 INSERT INTO student (guardian_id, student_contact_id, student_account_id) VALUES
 (1, 1, 1),
 (2, 4, 4),
-(3, 3, 1);
+
 
 -- golden_record (student_id: 1,2,3; record_type: enum; riwayah: enum)
 INSERT INTO golden_record (student_id, record_type, riwayah, date_of_completion, school_name) VALUES
@@ -485,11 +470,7 @@ INSERT INTO exam_teacher (exam_id, teacher_id, date) VALUES
 (2, 2, '2023-02-02'),
 (3, 3, '2023-02-03');
 
--- request_copy
-INSERT INTO request_copy (username, first_name, last_name, email, phone_number, description) VALUES
-('requester1', 'First1', 'Last1', 'req1@email.com', '123123123', 'Need a copy 1'),
-('requester2', 'First2', 'Last2', 'req2@email.com', '456456456', 'Need a copy 2'),
-('requester3', 'First3', 'Last3', 'req3@email.com', '789789789', 'Need a copy 3');
+
 
 -- student_lecture_achievements (achievement_type: enum)
 INSERT INTO student_lecture_achievements (lecture_id, student_id, achievement_type, lecture_date, from_surah, from_ayah, to_surah, to_ayah, teacher_note) VALUES
