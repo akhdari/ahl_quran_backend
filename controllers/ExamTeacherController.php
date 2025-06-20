@@ -76,4 +76,32 @@ class ExamTeacherController extends Controller
             self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
         }
     }
+
+     public static function deleteAllExamTeacherRelation(int ...$id) {
+        try {
+            $existing = ExamTeacher::getAllExamTeacherRelation(self::$dbconnection, (int)$id[0]);
+            if (!$existing) {
+                self::sendResponse(404, ['error' => 'Not found']);
+                return;
+            }
+            $allDeleted = true;
+            
+            self::$dbconnection->beginTransaction();
+            foreach ($existing as $item) {
+                if (!$item->delete(self::$dbconnection)) {
+                    $allDeleted = false;
+                    break;
+                }
+            }
+            if ($allDeleted) {
+                self::$dbconnection->commit();
+                self::sendResponse(200, ['message' => 'Deleted']);
+            } else {
+                self::$dbconnection->rollBack();
+                self::sendResponse(500, ['error' => 'Delete failed']);
+            }
+        } catch (\Exception $e) {
+            self::sendResponse(500, ['error' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
 }

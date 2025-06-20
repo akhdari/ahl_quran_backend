@@ -16,25 +16,33 @@ class S_ExamTeachersController extends S_Controller
                             t.first_name,
                             t.last_name,
                             t.profile_image,
-                            CONCAT(
-                                '[', 
-                                IFNULL(GROUP_CONCAT(
-                                    DISTINCT JSON_OBJECT(
-                                        'exam_id', e.exam_id,
-                                        'exam_level_id', e.exam_level_id,
-                                        'exam_name_ar', e.exam_name_ar,
-                                        'exam_name_en', e.exam_name_en,
-                                        'exam_type', e.exam_type,
-                                        'exam_sucess_min_point', e.exam_sucess_min_point,
-                                        'exam_max_point', e.exam_max_point,
-                                        'exam_memo_point', e.exam_memo_point,
-                                        'exam_tjwid_app_point', e.exam_tjwid_app_point,
-                                        'exam_tjwid_tho_point', e.exam_tjwid_tho_point,
-                                        'exam_performance_point', e.exam_performance_point
-                                    )
-                                ), ''),
-                                ']'
-                            ) AS exams_json
+                           CONCAT(
+    '[',
+    IFNULL(
+        GROUP_CONCAT(
+            DISTINCT
+            IF(
+                e.exam_id IS NOT NULL,
+                JSON_OBJECT(
+                    'exam_id', e.exam_id,
+                    'exam_level_id', e.exam_level_id,
+                    'exam_name_ar', e.exam_name_ar,
+                    'exam_name_en', e.exam_name_en,
+                    'exam_type', e.exam_type,
+                    'exam_sucess_min_point', e.exam_sucess_min_point,
+                    'exam_max_point', e.exam_max_point,
+                    'exam_memo_point', e.exam_memo_point,
+                    'exam_tjwid_app_point', e.exam_tjwid_app_point,
+                    'exam_tho_point', e.exam_tjwid_tho_point,
+                    'exam_performance_point', e.exam_performance_point
+                ),
+                NULL
+            )
+        ),
+        ''
+    ),
+    ']'
+) AS exams_json
                         FROM teacher t
                         LEFT JOIN exam_teacher et ON t.teacher_id = et.teacher_id
                         LEFT JOIN exam e ON et.exam_id = e.exam_id

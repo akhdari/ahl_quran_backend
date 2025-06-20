@@ -137,6 +137,7 @@ $router->get('/', fn() => var_dump(json_encode(['response' => 'API v1'])));
     $router->post('/examteachers',  ['ExamTeacherController', 'save']);
     $router->patch('/examteachers/exams/:id/teachers/:id',  ['ExamTeacherController', 'update']);
     $router->delete('/examteachers/exams/:id/teachers/:id',  ['ExamTeacherController', 'delete']);
+    $router->delete('/examteachers/exams/teachers/:id',  ['ExamTeacherController', 'deleteAllExamTeacherRelation']);
 
 
     // Routes for FormalEducationInfoController

@@ -56,6 +56,22 @@
 		    return $row ? new self($row) : null;
 		}
 
+		/** Find a record by primary key. */
+		public static function getAllExamTeacherRelation(DB $db, int $idTeacher): array {
+			$conn = $db->getConnection();
+			$sql = "SELECT * FROM " . self::$tableName . " WHERE teacher_id = ?";
+			$stmt = $conn->prepare($sql);
+			if (!$stmt) throw new \RuntimeException("Prepare failed: " . $conn->error);
+			$stmt->bind_param('i', $idTeacher);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$objects = [];
+			while ($row = $result->fetch_assoc()) {
+				$objects[] = new self($row);
+			}
+			return $objects;
+		}
+
 		/** Show all data. */
 		public static function getAll(DB $db): array {
 		    $conn = $db->getConnection();
